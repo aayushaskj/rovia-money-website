@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import { companyGroups, getCompany } from '@/data/companies';
 
-export default function CompanyGrid({ companyGroups, getCompany }) {
+export default function CompanyGrid() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
       {companyGroups.map((group) => (

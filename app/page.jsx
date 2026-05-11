@@ -1,4 +1,3 @@
-import { companyGroups, getCompany } from '@/data/companies';
 import CompanyGrid from '@/components/CompanyGrid';
 
 export const metadata = {
@@ -187,7 +186,7 @@ export default function Home() {
             Select your company
           </p>
 
-          <CompanyGrid companyGroups={companyGroups} getCompany={getCompany} />
+          <CompanyGrid />
         </div>
       </section>
 
