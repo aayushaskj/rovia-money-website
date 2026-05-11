@@ -3,7 +3,9 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { getTool, tools } from '@/data/tools';
 
-// Pre-generate all tool pages at build time
+// ISR — revalidate daily, don't block build on static generation
+export const revalidate = 86400;
+
 export async function generateStaticParams() {
   return tools.map((t) => ({ slug: t.slug }));
 }
@@ -19,31 +21,42 @@ export async function generateMetadata({ params }) {
   };
 }
 
-// Map slug → dynamic import
+// All tool components are pure client components — no SSR needed for calculators
 const componentMap = {
-  'ltcg-vs-stcg':    dynamic(() => import('@/components/tools/LtcgVsStcg')),
-  'net-take-home':   dynamic(() => import('@/components/tools/NetTakeHome')),
-  'lot-tracker':     dynamic(() => import('@/components/tools/LotTracker')),
-  'fx-comparison':   dynamic(() => import('@/components/tools/FxComparison')),
-  'wire-cost':       dynamic(() => import('@/components/tools/WireCost')),
-  'perquisite-tax':  dynamic(() => import('@/components/tools/PerquisiteTax')),
-  'diversification': dynamic(() => import('@/components/tools/Diversification')),
-  'form-67':         dynamic(() => import('@/components/tools/Form67')),
-  'sell-now':        dynamic(() => import('@/components/tools/SellNow')),
-  'concentration':   dynamic(() => import('@/components/tools/Concentration')),
-  'tax-year':        dynamic(() => import('@/components/tools/TaxYear')),
-  'grant-compare':   dynamic(() => import('@/components/tools/GrantCompare')),
-  'cash-vs-rsu':     dynamic(() => import('@/components/tools/CashVsRsu')),
-  'broker-audit':    dynamic(() => import('@/components/tools/BrokerAudit')),
-  'sbi-rate':        dynamic(() => import('@/components/tools/SbiRate')),
-  'schedule-fa':     dynamic(() => import('@/components/tools/ScheduleFa')),
-  'advance-tax':     dynamic(() => import('@/components/tools/AdvanceTax')),
-  'indexation':      dynamic(() => import('@/components/tools/Indexation')),
-  'grant-reconstruct': dynamic(() => import('@/components/tools/GrantReconstruct')),
-  'repatriation':    dynamic(() => import('@/components/tools/Repatriation')),
-  'unvested-risk':   dynamic(() => import('@/components/tools/UnvestedRisk')),
-  'esop-vs-rsu':     dynamic(() => import('@/components/tools/EsopVsRsu')),
+  'ltcg-vs-stcg':      dynamic(() => import('@/components/tools/LtcgVsStcg'),      { ssr: false }),
+  'net-take-home':     dynamic(() => import('@/components/tools/NetTakeHome'),      { ssr: false }),
+  'lot-tracker':       dynamic(() => import('@/components/tools/LotTracker'),       { ssr: false }),
+  'fx-comparison':     dynamic(() => import('@/components/tools/FxComparison'),     { ssr: false }),
+  'wire-cost':         dynamic(() => import('@/components/tools/WireCost'),         { ssr: false }),
+  'perquisite-tax':    dynamic(() => import('@/components/tools/PerquisiteTax'),    { ssr: false }),
+  'diversification':   dynamic(() => import('@/components/tools/Diversification'),  { ssr: false }),
+  'form-67':           dynamic(() => import('@/components/tools/Form67'),           { ssr: false }),
+  'sell-now':          dynamic(() => import('@/components/tools/SellNow'),          { ssr: false }),
+  'concentration':     dynamic(() => import('@/components/tools/Concentration'),    { ssr: false }),
+  'tax-year':          dynamic(() => import('@/components/tools/TaxYear'),          { ssr: false }),
+  'grant-compare':     dynamic(() => import('@/components/tools/GrantCompare'),     { ssr: false }),
+  'cash-vs-rsu':       dynamic(() => import('@/components/tools/CashVsRsu'),        { ssr: false }),
+  'broker-audit':      dynamic(() => import('@/components/tools/BrokerAudit'),      { ssr: false }),
+  'sbi-rate':          dynamic(() => import('@/components/tools/SbiRate'),          { ssr: false }),
+  'schedule-fa':       dynamic(() => import('@/components/tools/ScheduleFa'),       { ssr: false }),
+  'advance-tax':       dynamic(() => import('@/components/tools/AdvanceTax'),       { ssr: false }),
+  'indexation':        dynamic(() => import('@/components/tools/Indexation'),       { ssr: false }),
+  'grant-reconstruct': dynamic(() => import('@/components/tools/GrantReconstruct'), { ssr: false }),
+  'repatriation':      dynamic(() => import('@/components/tools/Repatriation'),     { ssr: false }),
+  'unvested-risk':     dynamic(() => import('@/components/tools/UnvestedRisk'),     { ssr: false }),
+  'esop-vs-rsu':       dynamic(() => import('@/components/tools/EsopVsRsu'),        { ssr: false }),
 };
+
+// Loading shell shown while the client component hydrates
+function ToolLoading() {
+  return (
+    <div style={{
+      minHeight: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+    }}>
+      <span style={{ fontSize: '13px', color: '#334155' }}>Loading calculator…</span>
+    </div>
+  );
+}
 
 export default async function ToolPage({ params }) {
   const { slug } = await params;
@@ -64,9 +77,7 @@ export default async function ToolPage({ params }) {
           <div style={{ marginBottom: '20px' }}>
             <Link
               href="/tools"
-              style={{
-                fontSize: '13px', color: '#475569', textDecoration: 'none', fontWeight: '500',
-              }}
+              style={{ fontSize: '13px', color: '#475569', textDecoration: 'none', fontWeight: '500' }}
             >
               ← All tools
             </Link>

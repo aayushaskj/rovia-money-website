@@ -35,6 +35,13 @@ export default function sitemap() {
     })),
   ];
 
+  const guideRoutes = companyList.map((slug) => ({
+    url: `${BASE_URL}/${slug}/guide`,
+    lastModified: CONTENT_UPDATED,
+    changeFrequency: 'monthly',
+    priority: 0.85,
+  }));
+
   return [
     {
       url: BASE_URL,
@@ -45,5 +52,6 @@ export default function sitemap() {
     ...companyRoutes,
     ...toolRoutes,
     ...storyRoutes,
+    ...guideRoutes,
   ];
 }
