@@ -10,10 +10,10 @@ export const metadata = {
 export default function StoriesPage() {
   return (
     <div style={{ background: '#020917', minHeight: '100vh' }}>
-      <div style={{ maxWidth: '860px', margin: '0 auto', padding: '72px 28px 80px' }}>
+      <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '72px 28px 96px' }}>
 
         {/* Header */}
-        <div style={{ marginBottom: '56px' }}>
+        <div style={{ marginBottom: '64px', textAlign: 'center' }}>
           <div style={{
             display: 'inline-block',
             fontSize: '11px', fontWeight: '700', color: 'var(--gold)',
@@ -24,123 +24,124 @@ export default function StoriesPage() {
             Real stories
           </div>
           <h1 style={{
-            fontSize: 'clamp(28px, 5vw, 44px)',
+            fontSize: 'clamp(28px, 5vw, 48px)',
             fontWeight: '800',
             color: '#f1f5f9',
             letterSpacing: '-0.03em',
-            lineHeight: '1.15',
+            lineHeight: '1.1',
             marginBottom: '16px',
           }}>
-            Indian engineers.<br />Real RSU problems.<br />What happened next.
+            People, not pitches.
           </h1>
-          <p style={{ fontSize: '17px', color: '#64748b', lineHeight: '1.7', maxWidth: '560px' }}>
-            First-person accounts from engineers and managers at US tech companies — on Schedule FA, FX costs, LTCG timing, and the spreadsheets they finally stopped using.
+          <p style={{ fontSize: '17px', color: '#64748b', lineHeight: '1.7', maxWidth: '520px', margin: '0 auto' }}>
+            20 engineers and managers at US tech companies — in their own words, on RSUs, repatriation, and the decisions they wish they'd made earlier.
           </p>
         </div>
 
-        {/* Story cards */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        {/* Story grid */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+          gap: '20px',
+        }}>
           {stories.map((s) => (
-            <Link key={s.slug} href={`/stories/${s.slug}`} className="story-card" style={{ textDecoration: 'none' }}>
-              <article style={{
+            <Link key={s.slug} href={`/stories/${s.slug}`} className="story-person-card" style={{ textDecoration: 'none' }}>
+              <div style={{
                 background: '#0a1220',
-                border: '1px solid rgba(255,255,255,0.06)',
-                borderRadius: '16px',
-                padding: '28px 32px',
+                border: '1px solid rgba(255,255,255,0.07)',
+                borderRadius: '20px',
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
               }}>
-                <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
-
-                  {/* Avatar */}
+                {/* Avatar area */}
+                <div style={{
+                  position: 'relative',
+                  height: '200px',
+                  background: `linear-gradient(160deg, ${s.avatarColor}18 0%, ${s.avatarColor}06 100%)`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                  gap: '12px',
+                }}>
+                  {/* Large initials circle */}
                   <div style={{
-                    width: '48px', height: '48px', borderRadius: '50%',
+                    width: '88px', height: '88px', borderRadius: '50%',
                     background: s.avatarColor + '22',
-                    border: `1px solid ${s.avatarColor}44`,
+                    border: `2px solid ${s.avatarColor}55`,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    flexShrink: 0,
-                    fontSize: '14px', fontWeight: '700', color: s.avatarColor,
+                    fontSize: '28px', fontWeight: '800', color: s.avatarColor,
                     letterSpacing: '0.02em',
                   }}>
                     {s.initials}
                   </div>
 
-                  {/* Content */}
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    {/* Meta row */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', flexWrap: 'wrap' }}>
-                      <span style={{ fontSize: '13px', fontWeight: '600', color: '#e2e8f0' }}>{s.name}</span>
-                      <span style={{ fontSize: '12px', color: '#475569' }}>·</span>
-                      <span style={{ fontSize: '12px', color: '#475569' }}>{s.role}, {s.company}</span>
-                      <span style={{ fontSize: '12px', color: '#475569' }}>·</span>
-                      <span style={{
-                        fontSize: '10px', fontWeight: '700', color: s.tagColor,
-                        background: s.tagColor + '15',
-                        border: `1px solid ${s.tagColor}30`,
-                        borderRadius: '999px', padding: '2px 8px',
-                        textTransform: 'uppercase', letterSpacing: '0.06em',
-                      }}>
-                        {s.tag}
-                      </span>
-                    </div>
-
-                    {/* Headline */}
-                    <h2 style={{
-                      fontSize: 'clamp(15px, 2vw, 17px)',
-                      fontWeight: '700',
-                      color: '#f1f5f9',
-                      lineHeight: '1.4',
-                      marginBottom: '10px',
-                      letterSpacing: '-0.01em',
-                    }}>
-                      {s.headline}
-                    </h2>
-
-                    {/* Metric + read time */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-                      <div style={{
-                        background: 'rgba(196,169,126,0.08)',
-                        border: '1px solid rgba(196,169,126,0.2)',
-                        borderRadius: '8px',
-                        padding: '6px 12px',
-                        display: 'flex', alignItems: 'baseline', gap: '6px',
-                      }}>
-                        <span style={{ fontSize: '15px', fontWeight: '800', color: 'var(--gold)', letterSpacing: '-0.02em' }}>
-                          {s.keyMetric.value}
-                        </span>
-                        <span style={{ fontSize: '11px', color: '#64748b' }}>
-                          {s.keyMetric.label}
-                        </span>
-                      </div>
-                      <span style={{ fontSize: '12px', color: '#334155' }}>{s.readTime}</span>
-                    </div>
+                  {/* Tag */}
+                  <div style={{
+                    fontSize: '10px', fontWeight: '700', color: s.tagColor,
+                    background: s.tagColor + '18',
+                    border: `1px solid ${s.tagColor}35`,
+                    borderRadius: '999px', padding: '3px 10px',
+                    textTransform: 'uppercase', letterSpacing: '0.08em',
+                  }}>
+                    {s.tag}
                   </div>
 
-                  {/* Arrow */}
-                  <div style={{ color: '#334155', fontSize: '18px', flexShrink: 0, paddingTop: '4px' }}>→</div>
+                  {/* Arrow button */}
+                  <div style={{
+                    position: 'absolute', bottom: '14px', right: '14px',
+                    width: '32px', height: '32px', borderRadius: '50%',
+                    background: 'rgba(196,169,126,0.12)',
+                    border: '1px solid rgba(196,169,126,0.25)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '14px', color: 'var(--gold)',
+                  }} className="story-arrow">
+                    →
+                  </div>
                 </div>
-              </article>
+
+                {/* Info */}
+                <div style={{ padding: '18px 20px 20px' }}>
+                  <div style={{ fontSize: '15px', fontWeight: '700', color: '#f1f5f9', marginBottom: '2px' }}>
+                    {s.name}
+                  </div>
+                  <div style={{ fontSize: '12px', color: '#475569', marginBottom: '12px' }}>
+                    {s.role} · {s.company}
+                  </div>
+                  <p style={{
+                    fontSize: '13px', color: '#64748b', lineHeight: '1.55',
+                    borderTop: '1px solid rgba(255,255,255,0.05)',
+                    paddingTop: '12px', margin: 0,
+                  }}>
+                    {s.teaser}
+                  </p>
+                </div>
+              </div>
             </Link>
           ))}
         </div>
 
         {/* Bottom CTA */}
         <div style={{
-          marginTop: '48px',
-          padding: '32px',
+          marginTop: '64px',
+          padding: '36px',
           background: 'linear-gradient(135deg, rgba(196,169,126,0.08), rgba(196,169,126,0.03))',
           border: '1px solid rgba(196,169,126,0.2)',
-          borderRadius: '16px',
+          borderRadius: '20px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
           gap: '16px',
+          textAlign: 'left',
         }}>
           <div>
-            <div style={{ fontSize: '15px', fontWeight: '700', color: '#f1f5f9', marginBottom: '4px' }}>
-              Recognise your situation in any of these?
+            <div style={{ fontSize: '16px', fontWeight: '700', color: '#f1f5f9', marginBottom: '6px' }}>
+              Recognise yourself in any of these?
             </div>
-            <div style={{ fontSize: '13px', color: '#64748b' }}>
-              Rovia is built for exactly these problems.
+            <div style={{ fontSize: '14px', color: '#64748b' }}>
+              These problems are solvable. Rovia is built for exactly this.
             </div>
           </div>
           <a
@@ -156,12 +157,21 @@ export default function StoriesPage() {
       </div>
 
       <style>{`
-        .story-card article {
-          transition: border-color 0.15s, background 0.15s;
+        .story-person-card > div {
+          transition: border-color 0.18s, transform 0.18s;
         }
-        .story-card:hover article {
-          border-color: rgba(196,169,126,0.25) !important;
-          background: #0c1628 !important;
+        .story-person-card:hover > div {
+          border-color: rgba(196,169,126,0.3) !important;
+          transform: translateY(-3px);
+        }
+        .story-person-card:hover .story-arrow {
+          background: rgba(196,169,126,0.2) !important;
+          border-color: rgba(196,169,126,0.5) !important;
+        }
+        @media (max-width: 520px) {
+          div[style*="repeat(auto-fill"] {
+            grid-template-columns: 1fr 1fr !important;
+          }
         }
       `}</style>
     </div>
