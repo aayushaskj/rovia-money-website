@@ -11,65 +11,50 @@ function inr(n) {
 function usd(n) {
   return '$' + Math.round(n).toLocaleString('en-US');
 }
-function pct(n) {
-  const sign = n >= 0 ? '+' : '';
-  return `${sign}${n.toFixed(1)}%`;
-}
 
-// Approximate analyst upside from current price → analyst target
-// We store analystTarget as a string like "$210"; current price from the ticker
 function parseTarget(t) {
   return parseFloat((t || '').replace(/[^0-9.]/g, '')) || null;
 }
 
-// All companies as a flat list for the diversification picker
 const ALL_COMPANIES = companyGroups
   .flatMap((g) => g.slugs)
   .map((s) => getCompany(s))
   .filter(Boolean);
 
-// ─── Tab wrapper ─────────────────────────────────────────────────────────────
+// ─── Main export ─────────────────────────────────────────────────────────────
 
 export default function RsuCalculators({ company }) {
-  const [tab, setTab] = useState('transfer');
+  const [tab, setTab] = useState('advantage');
 
   const tabs = [
-    { id: 'transfer', label: '💸 Transfer cost' },
-    { id: 'diversify', label: '📊 Diversification' },
+    { id: 'advantage', label: 'The Rovia Advantage' },
+    { id: 'diversify', label: 'Diversification' },
   ];
 
   return (
-    <div
-      style={{
-        background: '#080d18',
-        border: '1px solid rgba(255,255,255,0.07)',
-        borderRadius: '16px',
-        overflow: 'hidden',
-      }}
-    >
+    <div style={{ width: '100%' }}>
       {/* Tab bar */}
-      <div
-        style={{
-          display: 'flex',
-          borderBottom: '1px solid rgba(255,255,255,0.07)',
-          background: 'rgba(255,255,255,0.02)',
-        }}
-      >
+      <div style={{
+        display: 'flex',
+        borderBottom: '1px solid rgba(255,255,255,0.07)',
+        marginBottom: '32px',
+        gap: '4px',
+      }}>
         {tabs.map((t) => (
           <button
             key={t.id}
             onClick={() => setTab(t.id)}
             style={{
-              flex: 1,
-              background: tab === t.id ? '#0f1828' : 'transparent',
+              background: 'none',
               border: 'none',
-              borderBottom: tab === t.id ? `2px solid #3b82f6` : '2px solid transparent',
+              borderBottom: tab === t.id ? '2px solid var(--gold)' : '2px solid transparent',
               color: tab === t.id ? '#f1f5f9' : '#475569',
-              fontSize: '13px',
-              fontWeight: '600',
-              padding: '14px 20px',
+              fontSize: '14px',
+              fontWeight: tab === t.id ? '700' : '500',
+              padding: '10px 20px 12px',
               cursor: 'pointer',
               transition: 'all 0.15s',
+              marginBottom: '-1px',
             }}
           >
             {t.label}
@@ -77,149 +62,244 @@ export default function RsuCalculators({ company }) {
         ))}
       </div>
 
-      <div style={{ padding: '24px' }}>
-        {tab === 'transfer' && <TransferCostCalc company={company} />}
-        {tab === 'diversify' && <DiversifyCalc company={company} />}
-      </div>
+      {tab === 'advantage' && <AdvantageCalc company={company} />}
+      {tab === 'diversify' && <DiversifyCalc company={company} />}
     </div>
   );
 }
 
-// ─── Calculator 1: Transfer cost ─────────────────────────────────────────────
+// ─── Calculator 1: The Rovia Advantage ───────────────────────────────────────
 
-function TransferCostCalc({ company }) {
-  const [holding, setHolding] = useState(50000);   // USD value
-  const [wiresPerYear, setWiresPerYear] = useState(4);
-  const [years, setYears] = useState(5);
-  const [acatsFeeUSD, setAcatsFeeUSD] = useState(50); // varies by broker; many are $0
+function AdvantageCalc({ company }) {
+  const [rsuValue, setRsuValue] = useState(100000);      // USD
+  const [diversifyPct, setDiversifyPct] = useState(30);  // % repatriated per year
 
-  const WIRE_FEE_USD   = 35;                    // avg broker wire fee
-  const FX_SPREAD_PCT  = 0.004;                 // 40 paise per USD ≈ 0.4%
-  const USD_TO_INR     = 84;                    // approximate
+  const USD_TO_INR   = 84;
+  const repatriateUSD = rsuValue * (diversifyPct / 100);
 
-  const annualWireCost     = wiresPerYear * WIRE_FEE_USD * USD_TO_INR;
-  const annualFxLoss       = holding * FX_SPREAD_PCT * USD_TO_INR;
-  const totalAnnualFriction = annualWireCost + annualFxLoss;
-  const totalOverYears     = totalAnnualFriction * years;
-  const acatsCost          = acatsFeeUSD * USD_TO_INR;
-  const netSaving          = totalOverYears - acatsCost;
+  // Platform cost models (annual)
+  const platforms = [
+    {
+      id: 'rovia',
+      name: 'ROVIA',
+      color: 'var(--gold)',
+      fxMarkup: 0,
+      wireFee: 0,
+      costBasisAuto: true,
+      scheduleFa: true,
+      inrCostBasis: true,
+      supportIST: true,
+    },
+    {
+      id: 'ibkr',
+      name: 'IBKR',
+      color: '#60a5fa',
+      fxMarkup: 0.002,   // ~0.2% FX markup
+      wireFee: 10,        // $10 per withdrawal
+      costBasisAuto: false,
+      scheduleFa: false,
+      inrCostBasis: false,
+      supportIST: false,
+    },
+    {
+      id: 'indmoney',
+      name: 'INDMONEY',
+      color: '#a78bfa',
+      fxMarkup: 0.005,   // ~0.5% FX markup
+      wireFee: 0,
+      costBasisAuto: false,
+      scheduleFa: false,
+      inrCostBasis: false,
+      supportIST: true,
+    },
+    {
+      id: 'vested',
+      name: 'VESTED',
+      color: '#34d399',
+      fxMarkup: 0.004,   // ~0.4% FX markup
+      wireFee: 0,
+      costBasisAuto: false,
+      scheduleFa: false,
+      inrCostBasis: false,
+      supportIST: true,
+    },
+  ];
 
-  const rows = [
-    { label: `Wire fees (${wiresPerYear}×/yr × ₹${Math.round(WIRE_FEE_USD * USD_TO_INR).toLocaleString('en-IN')})`, broker: inr(annualWireCost * years), rovia: '₹0' },
-    { label: 'FX spread on repatriation (~0.4%)', broker: inr(annualFxLoss * years), rovia: '₹0' },
-    { label: `ACATS outbound fee — ${company.brokerShortName} (one-time, set $0 if free)`, broker: '₹0', rovia: inr(acatsCost) },
-    { label: `Total over ${years} year${years > 1 ? 's' : ''}`, broker: inr(totalOverYears), rovia: inr(acatsCost), highlight: true },
+  // Annual cost for each platform
+  const costs = platforms.map((p) => {
+    const fxCost   = repatriateUSD * p.fxMarkup * USD_TO_INR;
+    const wireCost = repatriateUSD > 0 ? p.wireFee * USD_TO_INR * 4 : 0; // ~4 wires/year
+    return { ...p, annualCost: fxCost + wireCost };
+    });
+
+  const roviaCost    = costs.find((c) => c.id === 'rovia').annualCost;
+  const maxCost      = Math.max(...costs.map((c) => c.annualCost));
+  const bestSaving   = maxCost - roviaCost; // vs most expensive alternative
+
+  const featureRows = [
+    { label: 'INR cost basis at vest', key: 'inrCostBasis' },
+    { label: 'Schedule FA auto-generated', key: 'scheduleFa' },
+    { label: 'Cost basis tracking', key: 'costBasisAuto' },
+    { label: '0 platform FX markup', key: 'fxMarkup', invert: true },
+    { label: 'India-based support (IST)', key: 'supportIST' },
   ];
 
   return (
     <div>
-      <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#f1f5f9', marginBottom: '4px' }}>
-        What staying on {company.brokerShortName} costs you
-      </h3>
-      <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '20px', lineHeight: '1.6' }}>
-        Adjust your holding value and repatriation frequency to see the real cost of staying put.
-      </p>
-
-      {/* Inputs */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px', marginBottom: '24px' }}>
-        <InputSlider
-          label={`${company.ticker} holding value`}
-          prefix="$"
-          value={holding}
-          min={5000} max={500000} step={5000}
-          onChange={setHolding}
-          display={`$${holding.toLocaleString('en-US')}`}
+      {/* Sliders row */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '32px',
+        marginBottom: '36px',
+      }} className="calc-sliders">
+        <PremiumSlider
+          label="How much are your RSUs worth?"
+          display={`$${rsuValue.toLocaleString('en-US')}`}
+          value={rsuValue}
+          min={10000} max={1000000} step={10000}
+          onChange={setRsuValue}
+          minLabel="$10K"
+          maxLabel="$1M"
         />
-        <InputSlider
-          label="Wires home per year"
-          value={wiresPerYear}
-          min={1} max={12} step={1}
-          onChange={setWiresPerYear}
-          display={`${wiresPerYear}×`}
-        />
-        <InputSlider
-          label="Years to project"
-          value={years}
-          min={1} max={10} step={1}
-          onChange={setYears}
-          display={`${years}Y`}
-        />
-        <InputSlider
-          label={`ACATS outbound fee — ${company.brokerShortName}`}
-          prefix="$"
-          value={acatsFeeUSD}
-          min={0} max={150} step={5}
-          onChange={setAcatsFeeUSD}
-          display={acatsFeeUSD === 0 ? 'Free' : `$${acatsFeeUSD}`}
+        <PremiumSlider
+          label="How much do you want to repatriate per year?"
+          display={`${diversifyPct}%`}
+          value={diversifyPct}
+          min={5} max={100} step={5}
+          onChange={setDiversifyPct}
+          minLabel="5%"
+          maxLabel="100%"
         />
       </div>
 
-      {/* ACATS key fact */}
-      <div
-        style={{
-          background: 'rgba(96,165,250,0.06)',
-          border: '1px solid rgba(96,165,250,0.15)',
-          borderRadius: '8px',
-          padding: '10px 14px',
-          fontSize: '12px',
-          color: '#93c5fd',
-          marginBottom: '16px',
-          lineHeight: '1.6',
-        }}
-      >
-        <strong>ACATS is an in-kind share transfer — no shares are sold.</strong> No capital gains event is triggered. Your shares arrive at Rovia with vest dates and cost basis preserved. The outbound fee (if any) is charged by your current broker, not Rovia. Many brokers charge $0.
+      {/* Savings callout */}
+      <div style={{
+        background: 'linear-gradient(135deg, rgba(196,169,126,0.1) 0%, rgba(196,169,126,0.04) 100%)',
+        border: '1px solid rgba(196,169,126,0.25)',
+        borderRadius: '14px',
+        padding: '20px 24px',
+        marginBottom: '28px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '12px',
+      }}>
+        <div>
+          <div style={{ fontSize: '13px', color: '#8892a4', marginBottom: '4px' }}>
+            Your annual savings with Rovia vs. typical alternatives
+          </div>
+          <div style={{
+            fontSize: 'clamp(28px, 4vw, 40px)',
+            fontWeight: '800',
+            color: 'var(--gold)',
+            letterSpacing: '-0.03em',
+            lineHeight: '1',
+          }}>
+            {inr(bestSaving)}
+          </div>
+          <div style={{ fontSize: '12px', color: '#4a5568', marginTop: '4px' }}>
+            in FX markup savings alone · on {usd(repatriateUSD)} repatriated/yr
+          </div>
+        </div>
+        <a href="https://rovia.onelink.me/xOtI/yjxw13ya" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: '14px', whiteSpace: 'nowrap' }}>
+          Transfer to Rovia →
+        </a>
       </div>
 
       {/* Comparison table */}
-      <div style={{ borderRadius: '10px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', background: 'rgba(255,255,255,0.03)', padding: '10px 16px' }}>
-          <div style={{ fontSize: '11px', color: '#475569', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Cost item</div>
-          <div style={{ fontSize: '11px', color: '#ef4444', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{company.brokerShortName}</div>
-          <div style={{ fontSize: '11px', color: '#34d399', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Rovia</div>
+      <div style={{
+        background: '#080d18',
+        border: '1px solid rgba(255,255,255,0.07)',
+        borderRadius: '14px',
+        overflow: 'hidden',
+      }}>
+        {/* Header */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: `2fr repeat(${platforms.length}, 1fr)`,
+          background: 'rgba(255,255,255,0.03)',
+          borderBottom: '1px solid rgba(255,255,255,0.07)',
+        }}>
+          <div style={{ padding: '14px 20px', fontSize: '11px', color: '#4a5568', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            Feature
+          </div>
+          {costs.map((p) => (
+            <div key={p.id} style={{
+              padding: '14px 12px',
+              fontSize: '11px',
+              fontWeight: '800',
+              color: p.color,
+              textTransform: 'uppercase',
+              letterSpacing: '0.07em',
+              textAlign: 'center',
+              borderLeft: '1px solid rgba(255,255,255,0.04)',
+            }}>
+              {p.name}
+            </div>
+          ))}
         </div>
-        {rows.map((r) => (
-          <div
-            key={r.label}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr 1fr',
-              padding: '12px 16px',
-              borderTop: '1px solid rgba(255,255,255,0.04)',
-              background: r.highlight ? 'rgba(59,130,246,0.06)' : 'transparent',
-            }}
-          >
-            <div style={{ fontSize: '13px', color: r.highlight ? '#94a3b8' : '#64748b', fontWeight: r.highlight ? '600' : '400' }}>{r.label}</div>
-            <div style={{ fontSize: '13px', color: '#fca5a5', fontWeight: r.highlight ? '700' : '500' }}>{r.broker}</div>
-            <div style={{ fontSize: '13px', color: '#86efac', fontWeight: r.highlight ? '700' : '500' }}>{r.rovia}</div>
+
+        {/* Annual cost row */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: `2fr repeat(${platforms.length}, 1fr)`,
+          borderBottom: '1px solid rgba(255,255,255,0.07)',
+          background: 'rgba(196,169,126,0.03)',
+        }}>
+          <div style={{ padding: '14px 20px', fontSize: '13px', fontWeight: '600', color: '#94a3b8' }}>
+            Annual FX cost
+          </div>
+          {costs.map((p) => (
+            <div key={p.id} style={{
+              padding: '14px 12px',
+              fontSize: '13px',
+              fontWeight: '700',
+              color: p.id === 'rovia' ? '#34d399' : '#fca5a5',
+              textAlign: 'center',
+              borderLeft: '1px solid rgba(255,255,255,0.04)',
+            }}>
+              {p.annualCost === 0 ? '₹0' : inr(p.annualCost)}
+            </div>
+          ))}
+        </div>
+
+        {/* Feature rows */}
+        {featureRows.map((row, i) => (
+          <div key={row.label} style={{
+            display: 'grid',
+            gridTemplateColumns: `2fr repeat(${platforms.length}, 1fr)`,
+            borderBottom: i < featureRows.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+          }}>
+            <div style={{ padding: '12px 20px', fontSize: '13px', color: '#64748b' }}>
+              {row.label}
+            </div>
+            {platforms.map((p) => {
+              const val = row.invert
+                ? p[row.key] === 0
+                : p[row.key];
+              return (
+                <div key={p.id} style={{
+                  padding: '12px',
+                  textAlign: 'center',
+                  borderLeft: '1px solid rgba(255,255,255,0.04)',
+                  fontSize: '14px',
+                }}>
+                  {val
+                    ? <span style={{ color: '#34d399' }}>✓</span>
+                    : <span style={{ color: '#334155' }}>–</span>
+                  }
+                </div>
+              );
+            })}
           </div>
         ))}
       </div>
 
-      {/* Net saving callout */}
-      <div
-        style={{
-          marginTop: '16px',
-          background: 'rgba(52,211,153,0.08)',
-          border: '1px solid rgba(52,211,153,0.2)',
-          borderRadius: '10px',
-          padding: '14px 18px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px',
-        }}
-      >
-        <div style={{ fontSize: '24px' }}>💰</div>
-        <div>
-          <div style={{ fontSize: '14px', fontWeight: '700', color: '#34d399' }}>
-            You save {inr(netSaving)} over {years} year{years > 1 ? 's' : ''} by switching to Rovia
-          </div>
-          <div style={{ fontSize: '12px', color: '#475569', marginTop: '2px' }}>
-            {acatsFeeUSD === 0
-              ? 'No transfer fee — your broker charges $0 for ACATS out'
-              : `After the one-time ${usd(acatsFeeUSD)} ACATS outbound fee`}
-          </div>
-        </div>
-      </div>
+      <p style={{ fontSize: '11px', color: '#2d3748', marginTop: '12px', lineHeight: '1.5' }}>
+        FX markup estimates are approximate and based on publicly available rate information. Actual costs vary by provider and transaction size. This is illustrative only.
+      </p>
     </div>
   );
 }
@@ -228,26 +308,14 @@ function TransferCostCalc({ company }) {
 
 function DiversifyCalc({ company }) {
   const [portfolioUSD, setPortfolioUSD] = useState(100000);
-  const [divPct, setDivPct] = useState(30);   // % to diversify out of this stock
+  const [divPct, setDivPct] = useState(30);
 
-  // Pre-select 3 companies as defaults (excluding current)
   const defaults = ALL_COMPANIES.filter((c) => c.slug !== company.slug).slice(0, 3);
   const [picks, setPicks] = useState(defaults.map((c) => c.slug));
 
-  const divAmount     = portfolioUSD * (divPct / 100);
-  const remainAmount  = portfolioUSD - divAmount;
-  const perStock      = divAmount / picks.length;
-
-  const currentTarget = parseTarget(company.analystTarget);
-  const currentPrice  = portfolioUSD; // treat portfolio value as effective price base
-
-  const results = picks.map((slug) => {
-    const c = getCompany(slug);
-    const target = parseTarget(c?.analystTarget);
-    const upside = target && currentTarget ? ((target - 100) / 100) * 100 : null; // simplified
-    // Use analyst target implied upside
-    return { c, target, perStock };
-  });
+  const divAmount    = portfolioUSD * (divPct / 100);
+  const remainAmount = portfolioUSD - divAmount;
+  const perStock     = divAmount / picks.length;
 
   const handlePick = (index, slug) => {
     const next = [...picks];
@@ -257,86 +325,76 @@ function DiversifyCalc({ company }) {
 
   return (
     <div>
-      <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#f1f5f9', marginBottom: '4px' }}>
-        Diversify out of {company.ticker}
-      </h3>
-      <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '20px', lineHeight: '1.6' }}>
-        RSU concentration risk is real. See what it looks like to move a slice into other holdings — all still US equities you can hold at Rovia.
+      <p style={{ fontSize: '14px', color: '#8892a4', marginBottom: '24px', lineHeight: '1.6' }}>
+        RSU concentration risk is real. See what it looks like to move a slice of your {company.ticker} holdings into other US stocks — all manageable inside Rovia.
       </p>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '24px' }}>
-        <InputSlider
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '28px' }} className="calc-sliders">
+        <PremiumSlider
           label="Total RSU portfolio"
-          prefix="$"
+          display={`$${portfolioUSD.toLocaleString('en-US')}`}
           value={portfolioUSD}
           min={10000} max={1000000} step={10000}
           onChange={setPortfolioUSD}
-          display={`$${portfolioUSD.toLocaleString('en-US')}`}
+          minLabel="$10K"
+          maxLabel="$1M"
         />
-        <InputSlider
+        <PremiumSlider
           label={`% to move out of ${company.ticker}`}
-          suffix="%"
+          display={`${divPct}%`}
           value={divPct}
           min={5} max={80} step={5}
           onChange={setDivPct}
-          display={`${divPct}%`}
+          minLabel="5%"
+          maxLabel="80%"
         />
       </div>
 
-      {/* Allocation visual */}
-      <div style={{ marginBottom: '20px' }}>
-        <div style={{ display: 'flex', gap: '0', borderRadius: '8px', overflow: 'hidden', height: '12px', marginBottom: '8px' }}>
-          <div style={{ flex: 100 - divPct, background: company.color + '80' }} />
+      {/* Allocation bar */}
+      <div style={{ marginBottom: '24px' }}>
+        <div style={{ display: 'flex', gap: '2px', borderRadius: '8px', overflow: 'hidden', height: '10px', marginBottom: '10px' }}>
+          <div style={{ flex: 100 - divPct, background: company.color + '90', transition: 'flex 0.2s' }} />
           {picks.map((slug, i) => {
             const c = getCompany(slug);
             return (
-              <div
-                key={slug + i}
-                style={{ flex: divPct / picks.length, background: c?.color || '#3b82f6', opacity: 0.8 }}
-              />
+              <div key={slug + i} style={{ flex: divPct / picks.length, background: (c?.color || '#3b82f6') + 'cc', transition: 'flex 0.2s' }} />
             );
           })}
         </div>
         <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ width: '10px', height: '10px', borderRadius: '2px', background: company.color, display: 'inline-block' }} />
-            <span style={{ fontSize: '12px', color: '#94a3b8' }}>{company.ticker} · {100 - divPct}% · ${Math.round(remainAmount).toLocaleString('en-US')}</span>
-          </div>
+          <span style={{ fontSize: '12px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ width: '8px', height: '8px', borderRadius: '2px', background: company.color, display: 'inline-block' }} />
+            {company.ticker} · {100 - divPct}% · ${Math.round(remainAmount).toLocaleString('en-US')}
+          </span>
           {picks.map((slug, i) => {
             const c = getCompany(slug);
             return (
-              <div key={slug + i} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ width: '10px', height: '10px', borderRadius: '2px', background: c?.color || '#3b82f6', display: 'inline-block' }} />
-                <span style={{ fontSize: '12px', color: '#94a3b8' }}>{c?.ticker} · {Math.round(divPct / picks.length)}% · ${Math.round(perStock).toLocaleString('en-US')}</span>
-              </div>
+              <span key={slug + i} style={{ fontSize: '12px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ width: '8px', height: '8px', borderRadius: '2px', background: c?.color || '#3b82f6', display: 'inline-block' }} />
+                {c?.ticker} · {Math.round(divPct / picks.length)}% · ${Math.round(perStock).toLocaleString('en-US')}
+              </span>
             );
           })}
         </div>
       </div>
 
-      {/* Pick stocks */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '20px' }}>
+      {/* Pick cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px', marginBottom: '20px' }}>
         {picks.map((slug, i) => {
           const c = getCompany(slug);
-          const target = parseTarget(c?.analystTarget);
-          const currentP = parseTarget(company.analystTarget);
-          // Show analyst upside vs current stock's analyst target for comparison
           return (
-            <div
-              key={i}
-              style={{
-                background: '#0f1828',
-                border: `1px solid ${c?.color || '#3b82f6'}28`,
-                borderRadius: '10px',
-                padding: '14px',
-              }}
-            >
+            <div key={i} style={{
+              background: '#080d18',
+              border: `1px solid ${c?.color || '#3b82f6'}28`,
+              borderRadius: '12px',
+              padding: '14px',
+            }}>
               <select
                 value={slug}
                 onChange={(e) => handlePick(i, e.target.value)}
                 style={{
                   width: '100%',
-                  background: 'rgba(255,255,255,0.05)',
+                  background: 'rgba(255,255,255,0.04)',
                   border: '1px solid rgba(255,255,255,0.1)',
                   borderRadius: '6px',
                   color: '#f1f5f9',
@@ -347,81 +405,70 @@ function DiversifyCalc({ company }) {
                   outline: 'none',
                 }}
               >
-                {ALL_COMPANIES.filter((ac) => ac.slug !== company.slug && (!picks.includes(ac.slug) || ac.slug === slug)).map((ac) => (
-                  <option key={ac.slug} value={ac.slug} style={{ background: '#0f1828' }}>
-                    {ac.name} ({ac.ticker})
-                  </option>
-                ))}
+                {ALL_COMPANIES
+                  .filter((ac) => ac.slug !== company.slug && (!picks.includes(ac.slug) || ac.slug === slug))
+                  .map((ac) => (
+                    <option key={ac.slug} value={ac.slug} style={{ background: '#0f1828' }}>
+                      {ac.name} ({ac.ticker})
+                    </option>
+                  ))}
               </select>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                {c?.hasLogo && (
-                  <img src={`/logos/${c.slug}.png`} alt={c?.name} width={20} height={20} style={{ objectFit: 'contain' }} />
-                )}
-                <div>
-                  <div style={{ fontSize: '13px', fontWeight: '600', color: '#f1f5f9' }}>{c?.name}</div>
-                  <div style={{ fontSize: '11px', color: '#475569' }}>{c?.ticker} · {c?.vestCycle}</div>
-                </div>
-              </div>
-
-              <div style={{ borderTop: '1px solid rgba(255,255,255,0.04)', paddingTop: '8px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                  <span style={{ fontSize: '11px', color: '#475569' }}>Allocation</span>
-                  <span style={{ fontSize: '12px', fontWeight: '600', color: '#94a3b8' }}>${Math.round(perStock).toLocaleString('en-US')}</span>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: '11px', color: '#475569' }}>Analyst target</span>
-                  <span style={{ fontSize: '12px', fontWeight: '600', color: '#34d399' }}>{c?.analystTarget || '—'}</span>
-                </div>
+              <div style={{ fontSize: '13px', fontWeight: '600', color: '#f1f5f9', marginBottom: '2px' }}>{c?.name}</div>
+              <div style={{ fontSize: '11px', color: '#475569', marginBottom: '10px' }}>{c?.ticker}</div>
+              <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '8px', display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: '11px', color: '#475569' }}>Allocation</span>
+                <span style={{ fontSize: '12px', fontWeight: '700', color: 'var(--gold)' }}>${Math.round(perStock).toLocaleString('en-US')}</span>
               </div>
             </div>
           );
         })}
       </div>
 
-      <div
-        style={{
-          background: 'rgba(59,130,246,0.06)',
-          border: '1px solid rgba(59,130,246,0.15)',
-          borderRadius: '10px',
-          padding: '14px 18px',
-          fontSize: '13px',
-          color: '#94a3b8',
-          lineHeight: '1.6',
-        }}
-      >
-        <strong style={{ color: '#60a5fa' }}>Analyst targets are consensus estimates, not guarantees.</strong>{' '}
-        Diversification reduces single-stock risk but does not eliminate market risk. This calculator is for illustration only.
+      <div style={{
+        background: 'rgba(255,255,255,0.02)',
+        border: '1px solid rgba(255,255,255,0.06)',
+        borderRadius: '10px',
+        padding: '12px 16px',
+        fontSize: '12px',
+        color: '#4a5568',
+        lineHeight: '1.6',
+      }}>
+        Analyst targets are consensus estimates, not guarantees. Diversification reduces single-stock risk but does not eliminate market risk. Illustrative only.
       </div>
     </div>
   );
 }
 
-// ─── Shared slider input ──────────────────────────────────────────────────────
+// ─── Premium slider input ──────────────────────────────────────────────────────
 
-function InputSlider({ label, value, min, max, step, onChange, display, prefix, suffix }) {
+function PremiumSlider({ label, value, min, max, step, onChange, display, minLabel, maxLabel }) {
+  const pct = ((value - min) / (max - min)) * 100;
+
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-        <span style={{ fontSize: '12px', color: '#475569', fontWeight: '600' }}>{label}</span>
-        <span style={{ fontSize: '13px', color: '#f1f5f9', fontWeight: '700' }}>{display}</span>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '10px' }}>
+        <span style={{ fontSize: '13px', color: '#8892a4', fontWeight: '500', lineHeight: '1.4', maxWidth: '65%' }}>{label}</span>
+        <span style={{ fontSize: '20px', color: 'var(--gold)', fontWeight: '800', letterSpacing: '-0.02em' }}>{display}</span>
       </div>
-      <input
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-        style={{
-          width: '100%',
-          accentColor: '#3b82f6',
-          cursor: 'pointer',
-        }}
-      />
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2px' }}>
-        <span style={{ fontSize: '10px', color: '#334155' }}>{prefix}{min.toLocaleString()}{suffix}</span>
-        <span style={{ fontSize: '10px', color: '#334155' }}>{prefix}{max.toLocaleString()}{suffix}</span>
+      <div style={{ position: 'relative' }}>
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onChange={(e) => onChange(Number(e.target.value))}
+          style={{
+            width: '100%',
+            accentColor: 'var(--gold)',
+            cursor: 'pointer',
+            height: '4px',
+          }}
+        />
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '4px' }}>
+        <span style={{ fontSize: '11px', color: '#334155' }}>{minLabel}</span>
+        <span style={{ fontSize: '11px', color: '#334155' }}>{maxLabel}</span>
       </div>
     </div>
   );

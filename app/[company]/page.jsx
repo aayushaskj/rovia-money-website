@@ -54,14 +54,15 @@ export default function CompanyPage({ params }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '32px' }}>
             <div style={{
               width: '72px', height: '72px', borderRadius: '18px',
-              background: 'rgba(255,255,255,0.07)',
-              border: '1px solid rgba(255,255,255,0.12)',
+              background: co.hasLogo ? '#ffffff' : 'rgba(255,255,255,0.07)',
+              border: '1px solid rgba(255,255,255,0.15)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               overflow: 'hidden', flexShrink: 0,
+              padding: co.hasLogo ? '8px' : '0',
               boxShadow: `0 0 0 1px ${co.color}22, 0 8px 32px rgba(0,0,0,0.4)`,
             }}>
               {co.hasLogo
-                ? <img src={`/logos/${co.slug}.png`} alt={co.name} width={48} height={48} style={{ objectFit: 'contain' }} />
+                ? <img src={`/logos/${co.slug}.png`} alt={co.name} width={52} height={52} style={{ objectFit: 'contain', display: 'block' }} />
                 : <span style={{ fontSize: '28px', fontWeight: '800', color: co.color }}>{co.name[0]}</span>
               }
             </div>

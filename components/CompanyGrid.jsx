@@ -67,22 +67,23 @@ export default function CompanyGrid() {
                       width: '52px',
                       height: '52px',
                       borderRadius: '13px',
-                      background: 'rgba(255,255,255,0.07)',
-                      border: '1px solid rgba(255,255,255,0.10)',
+                      background: c.hasLogo ? '#ffffff' : 'rgba(255,255,255,0.07)',
+                      border: c.hasLogo ? '1px solid rgba(255,255,255,0.15)' : '1px solid rgba(255,255,255,0.10)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       overflow: 'hidden',
                       flexShrink: 0,
+                      padding: c.hasLogo ? '6px' : '0',
                     }}
                   >
                     {c.hasLogo ? (
                       <img
                         src={`/logos/${c.slug}.png`}
                         alt={c.name}
-                        width={34}
-                        height={34}
-                        style={{ objectFit: 'contain' }}
+                        width={38}
+                        height={38}
+                        style={{ objectFit: 'contain', display: 'block' }}
                       />
                     ) : (
                       <span style={{ fontSize: '20px', fontWeight: '800', color: c.color }}>

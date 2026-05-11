@@ -35,8 +35,8 @@ export default function Navbar() {
           <img
             src="/rovia-logo-white.png"
             alt="Rovia"
-            height={22}
-            style={{ height: '22px', width: 'auto', display: 'block' }}
+            height={30}
+            style={{ height: '30px', width: 'auto', display: 'block' }}
           />
         </Link>
 
@@ -91,13 +91,14 @@ export default function Navbar() {
                     >
                       <div style={{
                         width: '26px', height: '26px', borderRadius: '7px',
-                        background: 'rgba(255,255,255,0.05)',
-                        border: '1px solid rgba(255,255,255,0.08)',
+                        background: c.hasLogo ? '#ffffff' : 'rgba(255,255,255,0.05)',
+                        border: '1px solid rgba(255,255,255,0.12)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         overflow: 'hidden', flexShrink: 0,
+                        padding: c.hasLogo ? '3px' : '0',
                       }}>
                         {c.hasLogo
-                          ? <img src={`/logos/${c.slug}.png`} alt={c.name} width={16} height={16} style={{ objectFit: 'contain' }} />
+                          ? <img src={`/logos/${c.slug}.png`} alt={c.name} width={18} height={18} style={{ objectFit: 'contain', display: 'block' }} />
                           : <span style={{ fontSize: '10px', fontWeight: '700', color: c.color }}>{c.name[0]}</span>
                         }
                       </div>
@@ -126,17 +127,6 @@ export default function Navbar() {
               </div>
             )}
           </div>
-
-          <Link href="/gallery" style={{
-            color: '#8892a4', fontSize: '14px', fontWeight: '500',
-            padding: '7px 14px', textDecoration: 'none', borderRadius: '999px',
-            transition: 'color 0.15s',
-          }}
-            onMouseEnter={e => e.currentTarget.style.color = '#f0f2f5'}
-            onMouseLeave={e => e.currentTarget.style.color = '#8892a4'}
-          >
-            Gallery
-          </Link>
 
           <a
             href="https://vested.blog" target="_blank" rel="noopener noreferrer"
@@ -208,12 +198,14 @@ export default function Navbar() {
                   }}>
                     <div style={{
                       width: '24px', height: '24px', borderRadius: '6px',
-                      background: 'rgba(255,255,255,0.05)',
+                      background: c.hasLogo ? '#ffffff' : 'rgba(255,255,255,0.05)',
+                      border: '1px solid rgba(255,255,255,0.1)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       overflow: 'hidden', flexShrink: 0,
+                      padding: c.hasLogo ? '3px' : '0',
                     }}>
                       {c.hasLogo
-                        ? <img src={`/logos/${c.slug}.png`} alt={c.name} width={14} height={14} style={{ objectFit: 'contain' }} />
+                        ? <img src={`/logos/${c.slug}.png`} alt={c.name} width={16} height={16} style={{ objectFit: 'contain', display: 'block' }} />
                         : <span style={{ fontSize: '9px', fontWeight: '700', color: c.color }}>{c.name[0]}</span>
                       }
                     </div>
@@ -225,7 +217,6 @@ export default function Navbar() {
             </div>
           ))}
           <div style={{ marginTop: '12px', display: 'flex', gap: '16px', paddingTop: '8px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-            <Link href="/gallery" onClick={() => setOpen(false)} style={{ color: '#8892a4', textDecoration: 'none', fontSize: '14px' }}>Gallery</Link>
             <a href="https://vested.blog" target="_blank" rel="noopener noreferrer" style={{ color: '#8892a4', textDecoration: 'none', fontSize: '14px' }}>Blog</a>
           </div>
         </div>
