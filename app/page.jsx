@@ -1,9 +1,87 @@
 import CompanyGrid from '@/components/CompanyGrid';
 
 export const metadata = {
-  title: 'Rovia — RSU management for Indian FAANG employees',
+  title: { absolute: 'Rovia — RSU Management for Indian Residents at US Companies' },
   description:
-    'Indian residents at Google, Meta, Microsoft, Amazon, Apple, Netflix: move your RSUs to Rovia. INR cost basis, 0 platform FX markup, India-tax reporting built-in.',
+    'Indian residents at Google, Meta, Microsoft, Amazon, Apple, Netflix: manage US RSUs with Rovia. INR cost basis at every vest, 0 FX markup, Schedule FA auto-generated. 48 companies.',
+  alternates: {
+    canonical: 'https://rovia.money',
+  },
+  openGraph: {
+    title: 'Rovia — RSU Management for Indian Residents at US Companies',
+    description:
+      'INR cost basis, 0 platform FX markup, Schedule FA auto-generated. For Indian residents at 48 US technology companies.',
+    url: 'https://rovia.money',
+    type: 'website',
+  },
+};
+
+// Homepage FAQ for schema — answers top queries about Rovia
+const homepageFAQ = [
+  {
+    q: 'What is Rovia and who is it for?',
+    a: 'Rovia is an India-first investment platform for Indian residents who hold US RSUs (Restricted Stock Units) from US technology companies like Google, Meta, Microsoft, Amazon, Apple, and Netflix. It handles INR cost basis, LTCG tracking, Schedule FA, and repatriation without FX markup.',
+  },
+  {
+    q: 'How does Rovia calculate INR cost basis for RSUs?',
+    a: 'Rovia automatically records the INR cost basis for every RSU lot at the vest date using the SBI TT buying rate — the rate mandated by Indian tax law. This eliminates the need to manually track USD-to-INR conversion for each vest.',
+  },
+  {
+    q: 'What is the LTCG holding period for US stocks held by Indian residents?',
+    a: 'For Indian residents, the long-term capital gains (LTCG) holding period for foreign equity (including US RSUs) is 24 months, not the US 12-month threshold. Rovia shows a 24-month countdown per lot so you never misclassify gains.',
+  },
+  {
+    q: 'Does transferring RSUs to Rovia trigger a capital gains tax event?',
+    a: 'No. Transferring RSUs via ACATS (Automated Customer Account Transfer Service) is an in-kind share transfer. No shares are sold during the transfer. Your holding period and cost basis are preserved. There is no capital gains event.',
+  },
+  {
+    q: 'What is Schedule FA and does Rovia help with it?',
+    a: 'Schedule FA (Foreign Assets) is a mandatory disclosure in the Indian Income Tax Return for residents who hold foreign assets including US stocks. Rovia auto-generates Schedule FA disclosures using your holding data, including peak balance calculations.',
+  },
+  {
+    q: 'Which US companies are supported on Rovia?',
+    a: 'Rovia supports RSU transfers from employees at 48 US technology companies including Google (Alphabet), Meta, Microsoft, Amazon, Apple, Netflix, Salesforce, ServiceNow, PayPal, Uber, Adobe, Intel, AMD, NVIDIA, Qualcomm, and more.',
+  },
+];
+
+const homePageSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      '@id': 'https://rovia.money/#webpage',
+      url: 'https://rovia.money',
+      name: 'Rovia — RSU Management for Indian Residents at US Companies',
+      description:
+        'Manage US RSUs as an Indian resident. INR cost basis at every vest, 0 platform FX markup, Schedule FA auto-generated. 48 US companies supported.',
+      isPartOf: { '@id': 'https://rovia.money/#website' },
+      about: { '@id': 'https://rovia.money/#service' },
+      inLanguage: 'en-IN',
+      breadcrumb: {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: 'https://rovia.money',
+          },
+        ],
+      },
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://rovia.money/#faq',
+      mainEntity: homepageFAQ.map((item) => ({
+        '@type': 'Question',
+        name: item.q,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.a,
+        },
+      })),
+    },
+  ],
 };
 
 const roviaFeatures = [
@@ -42,6 +120,10 @@ const roviaFeatures = [
 export default function Home() {
   return (
     <div style={{ minHeight: '100vh' }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homePageSchema) }}
+      />
 
       {/* ── Hero ──────────────────────────────────────────────── */}
       <section style={{

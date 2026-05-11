@@ -1,0 +1,21 @@
+{
+  "name": "Rovia — RSU Management for Indian Employees",
+  "short_name": "Rovia",
+  "description": "Manage your US RSUs as an Indian resident. INR cost basis, 0 FX markup, Schedule FA auto-generated.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020917",
+  "theme_color": "#020917",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

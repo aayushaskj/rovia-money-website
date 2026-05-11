@@ -35,8 +35,8 @@ export default function Navbar() {
           <img
             src="/rovia-logo-white.png"
             alt="Rovia"
-            height={30}
-            style={{ height: '30px', width: 'auto', display: 'block' }}
+            height={48}
+            style={{ height: '48px', width: 'auto', display: 'block' }}
           />
         </Link>
 

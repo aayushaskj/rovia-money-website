@@ -26,7 +26,7 @@ export default function Footer() {
             <img
               src="/rovia-logo-white.png"
               alt="Rovia"
-              style={{ height: '24px', width: 'auto', marginBottom: '12px', display: 'block' }}
+              style={{ height: '40px', width: 'auto', marginBottom: '12px', display: 'block' }}
             />
             <p style={{ fontSize: '13px', color: '#4a5568', lineHeight: '1.6', maxWidth: '220px', marginBottom: '16px' }}>
               RSU management for Indian residents at US companies.

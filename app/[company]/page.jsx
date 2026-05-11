@@ -16,17 +16,98 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const co = getCompany(params.company);
   if (!co) return {};
+  // Trim description to 155 chars max for Google
+  const desc = co.seoDescription?.length > 155
+    ? co.seoDescription.slice(0, 152) + '...'
+    : co.seoDescription;
   return {
-    title: co.seoTitle,
-    description: co.seoDescription,
+    title: { absolute: co.seoTitle },   // bypass template — titles already have "| Rovia" or brand
+    description: desc,
     keywords: co.seoKeywords,
+    alternates: {
+      canonical: `https://rovia.money/${co.slug}`,
+    },
     openGraph: {
       title: co.seoTitle,
-      description: co.seoDescription,
+      description: desc,
       url: `https://rovia.money/${co.slug}`,
       locale: 'en_IN',
-      type: 'website',
+      type: 'article',
+      images: [
+        {
+          url: `/og-default.png`,
+          width: 1200,
+          height: 630,
+          alt: `${co.name} RSU management for Indian employees — Rovia`,
+        },
+      ],
     },
+    twitter: {
+      card: 'summary_large_image',
+      title: co.seoTitle,
+      description: desc,
+      images: ['/og-default.png'],
+    },
+  };
+}
+
+// Build JSON-LD schema for a company page
+function buildCompanySchema(co) {
+  const pageUrl = `https://rovia.money/${co.slug}`;
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      // WebPage
+      {
+        '@type': 'WebPage',
+        '@id': `${pageUrl}#webpage`,
+        url: pageUrl,
+        name: co.seoTitle,
+        description: co.seoDescription,
+        isPartOf: { '@id': 'https://rovia.money/#website' },
+        inLanguage: 'en-IN',
+        breadcrumb: {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://rovia.money' },
+            { '@type': 'ListItem', position: 2, name: `${co.name} RSU India`, item: pageUrl },
+          ],
+        },
+      },
+      // HowTo — the transfer steps
+      {
+        '@type': 'HowTo',
+        '@id': `${pageUrl}#howto`,
+        name: `How to transfer ${co.name} RSUs from ${co.brokerShortName} to Rovia`,
+        description: `Step-by-step guide for Indian ${co.name} employees to transfer ${co.ticker} RSUs from ${co.brokerShortName} to Rovia for INR cost basis tracking and India-tax reporting.`,
+        totalTime: 'PT5M',
+        tool: [
+          { '@type': 'HowToTool', name: co.brokerShortName },
+          { '@type': 'HowToTool', name: 'Rovia App' },
+        ],
+        step: (co.steps || []).map((step, i) => ({
+          '@type': 'HowToStep',
+          position: i + 1,
+          name: step.title,
+          text: step.detail,
+          url: `${pageUrl}#step-${i + 1}`,
+        })),
+      },
+      // FAQPage
+      {
+        '@type': 'FAQPage',
+        '@id': `${pageUrl}#faq`,
+        mainEntity: (co.faq || []).map((item) => ({
+          '@type': 'Question',
+          name: item.q,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.a,
+          },
+        })),
+      },
+    ],
   };
 }
 
@@ -34,8 +115,14 @@ export default function CompanyPage({ params }) {
   const co = getCompany(params.company);
   if (!co) notFound();
 
+  const schema = buildCompanySchema(co);
+
   return (
     <div style={{ minHeight: '100vh' }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
 
       {/* ── Hero ────────────────────────────────────────────── */}
       <section style={{ padding: '72px 28px 56px', position: 'relative', overflow: 'hidden' }}>
