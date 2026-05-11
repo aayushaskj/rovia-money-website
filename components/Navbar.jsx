@@ -31,13 +31,9 @@ export default function Navbar() {
       }}>
 
         {/* Logo */}
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0 }}>
-          <img
-            src="/rovia-logo-dark.png"
-            alt="Rovia"
-            height={48}
-            style={{ height: '48px', width: 'auto', display: 'block' }}
-          />
+        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '9px', textDecoration: 'none', flexShrink: 0 }}>
+          <img src="/rovia-icon.svg" alt="" width={22} height={22} style={{ display: 'block', flexShrink: 0 }} />
+          <span style={{ fontSize: '20px', fontWeight: '700', color: '#f1f5f9', letterSpacing: '-0.03em', lineHeight: 1 }}>rovia</span>
         </Link>
 
         {/* Desktop nav */}

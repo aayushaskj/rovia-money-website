@@ -23,11 +23,10 @@ export default function Footer() {
 
           {/* Brand */}
           <div>
-            <img
-              src="/rovia-logo-dark.png"
-              alt="Rovia"
-              style={{ height: '40px', width: 'auto', marginBottom: '12px', display: 'block' }}
-            />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+              <img src="/rovia-icon.svg" alt="" width={20} height={20} style={{ display: 'block', flexShrink: 0 }} />
+              <span style={{ fontSize: '18px', fontWeight: '700', color: '#f1f5f9', letterSpacing: '-0.03em', lineHeight: 1 }}>rovia</span>
+            </div>
             <p style={{ fontSize: '13px', color: '#4a5568', lineHeight: '1.6', maxWidth: '220px', marginBottom: '16px' }}>
               RSU management for Indian residents at US companies.
             </p>

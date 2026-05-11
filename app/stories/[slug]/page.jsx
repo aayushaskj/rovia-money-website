@@ -25,7 +25,7 @@ export default function StoryPage({ params }) {
   const s = getStory(params.slug);
   if (!s) notFound();
 
-  const others = stories.filter((x) => x.slug !== s.slug).slice(0, 3);
+  // no "more stories" — keep the page focused on this person
 
   return (
     <div style={{ background: '#020917', minHeight: '100vh' }}>
@@ -66,12 +66,18 @@ export default function StoryPage({ params }) {
             }}>
               <div style={{
                 width: '100px', height: '100px', borderRadius: '50%',
+                overflow: 'hidden',
                 background: s.avatarColor + '22',
                 border: `2px solid ${s.avatarColor}55`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '32px', fontWeight: '800', color: s.avatarColor,
+                flexShrink: 0,
               }}>
-                {s.initials}
+                <img
+                  src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(s.name)}&backgroundColor=transparent&radius=0&skinColor=ae5d29,d08b5b,614335&hairColor=2c1b18,4a312c,090806&facialHairColor=2c1b18,4a312c`}
+                  alt={s.name}
+                  width={100}
+                  height={100}
+                  style={{ display: 'block', width: '100%', height: '100%' }}
+                />
               </div>
               <div>
                 <div style={{ fontSize: '17px', fontWeight: '700', color: '#f1f5f9' }}>{s.name}</div>
@@ -171,55 +177,15 @@ export default function StoryPage({ params }) {
               ))}
             </div>
 
-            {/* More stories */}
-            {others.length > 0 && (
-              <div style={{ marginTop: '56px' }}>
-                <div style={{
-                  fontSize: '11px', fontWeight: '700', color: '#334155',
-                  textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '16px',
-                }}>
-                  More stories
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '10px' }}>
-                  {others.map((o) => (
-                    <Link key={o.slug} href={`/stories/${o.slug}`} className="more-story-card" style={{ textDecoration: 'none' }}>
-                      <div style={{
-                        padding: '16px',
-                        background: '#0a1220',
-                        border: '1px solid rgba(255,255,255,0.05)',
-                        borderRadius: '14px',
-                        display: 'flex', flexDirection: 'column', gap: '10px',
-                      }}>
-                        <div style={{
-                          width: '40px', height: '40px', borderRadius: '50%',
-                          background: o.avatarColor + '22', border: `1px solid ${o.avatarColor}44`,
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          fontSize: '12px', fontWeight: '700', color: o.avatarColor,
-                        }}>
-                          {o.initials}
-                        </div>
-                        <div>
-                          <div style={{ fontSize: '13px', fontWeight: '600', color: '#e2e8f0', marginBottom: '2px' }}>
-                            {o.name}
-                          </div>
-                          <div style={{ fontSize: '11px', color: '#475569' }}>{o.company}</div>
-                        </div>
-                        <div style={{
-                          fontSize: '10px', fontWeight: '700', color: o.tagColor,
-                          background: o.tagColor + '18',
-                          border: `1px solid ${o.tagColor}35`,
-                          borderRadius: '999px', padding: '2px 8px',
-                          textTransform: 'uppercase', letterSpacing: '0.06em',
-                          alignSelf: 'flex-start',
-                        }}>
-                          {o.tag}
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
+            {/* Back to all stories */}
+            <div style={{ marginTop: '56px' }}>
+              <Link href="/stories" style={{
+                display: 'inline-flex', alignItems: 'center', gap: '6px',
+                fontSize: '13px', color: '#475569', textDecoration: 'none',
+              }} className="back-link">
+                ← All stories
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -227,8 +193,7 @@ export default function StoryPage({ params }) {
 
       <style>{`
         .breadcrumb-link:hover { color: #94a3b8 !important; }
-        .more-story-card > div { transition: border-color 0.15s; }
-        .more-story-card:hover > div { border-color: rgba(196,169,126,0.3) !important; }
+        .back-link:hover { color: #94a3b8 !important; }
 
         @media (max-width: 760px) {
           .story-layout {

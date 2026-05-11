@@ -10,10 +10,10 @@ export const metadata = {
 export default function StoriesPage() {
   return (
     <div style={{ background: '#020917', minHeight: '100vh' }}>
-      <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '72px 28px 96px' }}>
+      <div style={{ maxWidth: '1060px', margin: '0 auto', padding: '72px 28px 96px' }}>
 
         {/* Header */}
-        <div style={{ marginBottom: '64px', textAlign: 'center' }}>
+        <div style={{ marginBottom: '56px' }}>
           <div style={{
             display: 'inline-block',
             fontSize: '11px', fontWeight: '700', color: 'var(--gold)',
@@ -24,16 +24,16 @@ export default function StoriesPage() {
             Real stories
           </div>
           <h1 style={{
-            fontSize: 'clamp(28px, 5vw, 48px)',
+            fontSize: 'clamp(26px, 4vw, 42px)',
             fontWeight: '800',
             color: '#f1f5f9',
             letterSpacing: '-0.03em',
-            lineHeight: '1.1',
-            marginBottom: '16px',
+            lineHeight: '1.15',
+            marginBottom: '14px',
           }}>
             People, not pitches.
           </h1>
-          <p style={{ fontSize: '17px', color: '#64748b', lineHeight: '1.7', maxWidth: '520px', margin: '0 auto' }}>
+          <p style={{ fontSize: '16px', color: '#64748b', lineHeight: '1.7', maxWidth: '520px' }}>
             20 engineers and managers at US tech companies — in their own words, on RSUs, repatriation, and the decisions they wish they'd made earlier.
           </p>
         </div>
@@ -41,78 +41,72 @@ export default function StoriesPage() {
         {/* Story grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-          gap: '20px',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+          gap: '16px',
         }}>
           {stories.map((s) => (
             <Link key={s.slug} href={`/stories/${s.slug}`} className="story-person-card" style={{ textDecoration: 'none' }}>
               <div style={{
                 background: '#0a1220',
                 border: '1px solid rgba(255,255,255,0.07)',
-                borderRadius: '20px',
+                borderRadius: '18px',
                 overflow: 'hidden',
                 display: 'flex',
                 flexDirection: 'column',
               }}>
-                {/* Avatar area */}
+
+                {/* Face area */}
                 <div style={{
-                  position: 'relative',
-                  height: '200px',
-                  background: `linear-gradient(160deg, ${s.avatarColor}18 0%, ${s.avatarColor}06 100%)`,
+                  height: '170px',
+                  background: `linear-gradient(180deg, ${s.avatarColor}12 0%, #0a1220 100%)`,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  flexDirection: 'column',
-                  gap: '12px',
+                  position: 'relative',
                 }}>
-                  {/* Large initials circle */}
                   <div style={{
-                    width: '88px', height: '88px', borderRadius: '50%',
-                    background: s.avatarColor + '22',
-                    border: `2px solid ${s.avatarColor}55`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '28px', fontWeight: '800', color: s.avatarColor,
-                    letterSpacing: '0.02em',
+                    width: '96px',
+                    height: '96px',
+                    borderRadius: '50%',
+                    overflow: 'hidden',
+                    border: `2px solid ${s.avatarColor}40`,
+                    background: s.avatarColor + '15',
+                    flexShrink: 0,
                   }}>
-                    {s.initials}
+                    <img
+                      src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(s.name)}&backgroundColor=transparent&radius=0&skinColor=ae5d29,d08b5b,614335&hairColor=2c1b18,4a312c,090806&facialHairColor=2c1b18,4a312c`}
+                      alt={s.name}
+                      width={96}
+                      height={96}
+                      style={{ display: 'block', width: '100%', height: '100%' }}
+                    />
                   </div>
 
-                  {/* Tag */}
-                  <div style={{
-                    fontSize: '10px', fontWeight: '700', color: s.tagColor,
-                    background: s.tagColor + '18',
-                    border: `1px solid ${s.tagColor}35`,
-                    borderRadius: '999px', padding: '3px 10px',
-                    textTransform: 'uppercase', letterSpacing: '0.08em',
-                  }}>
-                    {s.tag}
-                  </div>
-
-                  {/* Arrow button */}
-                  <div style={{
-                    position: 'absolute', bottom: '14px', right: '14px',
-                    width: '32px', height: '32px', borderRadius: '50%',
-                    background: 'rgba(196,169,126,0.12)',
-                    border: '1px solid rgba(196,169,126,0.25)',
+                  {/* Arrow */}
+                  <div className="story-arrow" style={{
+                    position: 'absolute', bottom: '12px', right: '12px',
+                    width: '28px', height: '28px', borderRadius: '50%',
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(255,255,255,0.1)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '14px', color: 'var(--gold)',
-                  }} className="story-arrow">
+                    fontSize: '12px', color: '#475569',
+                  }}>
                     →
                   </div>
                 </div>
 
                 {/* Info */}
-                <div style={{ padding: '18px 20px 20px' }}>
-                  <div style={{ fontSize: '15px', fontWeight: '700', color: '#f1f5f9', marginBottom: '2px' }}>
+                <div style={{ padding: '14px 16px 18px' }}>
+                  <div style={{ fontSize: '14px', fontWeight: '700', color: '#f1f5f9', marginBottom: '2px' }}>
                     {s.name}
                   </div>
-                  <div style={{ fontSize: '12px', color: '#475569', marginBottom: '12px' }}>
-                    {s.role} · {s.company}
+                  <div style={{ fontSize: '11px', color: '#475569', marginBottom: '10px' }}>
+                    {s.role.split(' ').slice(-1)[0] === s.role ? s.role : s.role} · {s.company}
                   </div>
                   <p style={{
-                    fontSize: '13px', color: '#64748b', lineHeight: '1.55',
+                    fontSize: '12px', color: '#64748b', lineHeight: '1.55',
                     borderTop: '1px solid rgba(255,255,255,0.05)',
-                    paddingTop: '12px', margin: 0,
+                    paddingTop: '10px', margin: 0,
                   }}>
                     {s.teaser}
                   </p>
@@ -125,22 +119,21 @@ export default function StoriesPage() {
         {/* Bottom CTA */}
         <div style={{
           marginTop: '64px',
-          padding: '36px',
-          background: 'linear-gradient(135deg, rgba(196,169,126,0.08), rgba(196,169,126,0.03))',
-          border: '1px solid rgba(196,169,126,0.2)',
-          borderRadius: '20px',
+          padding: '32px 36px',
+          background: 'linear-gradient(135deg, rgba(196,169,126,0.07), rgba(196,169,126,0.02))',
+          border: '1px solid rgba(196,169,126,0.18)',
+          borderRadius: '18px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
           gap: '16px',
-          textAlign: 'left',
         }}>
           <div>
-            <div style={{ fontSize: '16px', fontWeight: '700', color: '#f1f5f9', marginBottom: '6px' }}>
+            <div style={{ fontSize: '15px', fontWeight: '700', color: '#f1f5f9', marginBottom: '5px' }}>
               Recognise yourself in any of these?
             </div>
-            <div style={{ fontSize: '14px', color: '#64748b' }}>
+            <div style={{ fontSize: '13px', color: '#64748b' }}>
               These problems are solvable. Rovia is built for exactly this.
             </div>
           </div>
@@ -161,15 +154,16 @@ export default function StoriesPage() {
           transition: border-color 0.18s, transform 0.18s;
         }
         .story-person-card:hover > div {
-          border-color: rgba(196,169,126,0.3) !important;
-          transform: translateY(-3px);
+          border-color: rgba(255,255,255,0.14) !important;
+          transform: translateY(-2px);
         }
         .story-person-card:hover .story-arrow {
-          background: rgba(196,169,126,0.2) !important;
-          border-color: rgba(196,169,126,0.5) !important;
+          background: rgba(196,169,126,0.12) !important;
+          border-color: rgba(196,169,126,0.3) !important;
+          color: var(--gold) !important;
         }
-        @media (max-width: 520px) {
-          div[style*="repeat(auto-fill"] {
+        @media (max-width: 480px) {
+          div[style*="repeat(auto-fill, minmax(200px"] {
             grid-template-columns: 1fr 1fr !important;
           }
         }

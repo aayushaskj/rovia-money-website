@@ -36,12 +36,11 @@ export const metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
       { url: '/favicon.ico', sizes: 'any' },
     ],
     apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
     ],
     other: [
       { rel: 'manifest', url: '/site.webmanifest' },
@@ -72,9 +71,9 @@ const orgSchema = {
       url: 'https://rovia.money',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://rovia.money/rovia-logo-dark.png',
-        width: 960,
-        height: 1080,
+        url: 'https://rovia.money/rovia-icon.svg',
+        width: 30,
+        height: 30,
       },
       description:
         'Rovia is an India-first investment platform for Indian residents holding US RSUs from FAANG and US technology companies. It provides INR cost basis tracking, 0 platform FX markup on repatriation, Schedule FA auto-generation, and 24-month LTCG countdown per lot.',

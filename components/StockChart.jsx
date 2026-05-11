@@ -22,7 +22,7 @@ function fmtPct(n) {
   return `${sign}${n.toFixed(2)}%`;
 }
 
-export default function StockChart({ ticker, color = '#3b82f6' }) {
+export default function StockChart({ ticker, color = '#3b82f6', analystTarget }) {
   const chartContainerRef = useRef(null);
   const chartRef          = useRef(null);
   const seriesRef         = useRef(null);
@@ -95,6 +95,21 @@ export default function StockChart({ ticker, color = '#3b82f6' }) {
         crosshairMarkerBackgroundColor: color,
       });
 
+      // Analyst target price line
+      if (analystTarget) {
+        const targetNum = parseFloat(String(analystTarget).replace(/[$,]/g, ''));
+        if (!isNaN(targetNum)) {
+          series.createPriceLine({
+            price: targetNum,
+            color: '#c4a97e',
+            lineWidth: 1,
+            lineStyle: 2, // dashed
+            axisLabelVisible: true,
+            title: `Analyst  $${targetNum.toLocaleString('en-US')}`,
+          });
+        }
+      }
+
       // Subscribe to crosshair for tooltip
       chart.subscribeCrosshairMove((param) => {
         if (!param.time || !param.seriesData) {
@@ -124,7 +139,7 @@ export default function StockChart({ ticker, color = '#3b82f6' }) {
         chartRef.current = null;
       }
     };
-  }, [color]);
+  }, [color, analystTarget]);
 
   // Fetch data whenever ticker or range changes
   useEffect(() => {
@@ -208,6 +223,11 @@ export default function StockChart({ ticker, color = '#3b82f6' }) {
           {meta?.fiftyTwoWeekLow && meta?.fiftyTwoWeekHigh && (
             <div style={{ fontSize: '11px', color: '#475569', marginTop: '4px' }}>
               52W: ${fmt(meta.fiftyTwoWeekLow)} – ${fmt(meta.fiftyTwoWeekHigh)}
+              {analystTarget && !analystTarget.includes('Acquired') && !analystTarget.includes('private') && (
+                <span style={{ marginLeft: '12px' }}>
+                  <span style={{ color: '#c4a97e', fontWeight: '600' }}>— — Analyst target: {analystTarget}</span>
+                </span>
+              )}
             </div>
           )}
         </div>

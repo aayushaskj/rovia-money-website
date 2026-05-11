@@ -1,13 +1,12 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getCompany, companyList } from '@/data/companies';
-import { companyGuides } from '@/data/guides';
+import { earningsData } from '@/data/earnings';
 import GuideContent from '@/components/GuideContent';
 import dynamic from 'next/dynamic';
 
 const StockChart    = dynamic(() => import('@/components/StockChart'),    { ssr: false });
 const RsuCalculators = dynamic(() => import('@/components/RsuCalculators'), { ssr: false });
-const EsppCalculator = dynamic(() => import('@/components/EsppCalculator').then(m => ({ default: m.default })), { ssr: false });
 
 export async function generateStaticParams() {
   return companyList.map((slug) => ({ company: slug }));
@@ -349,9 +348,76 @@ export default function CompanyPage({ params }) {
           <div style={{ display: 'flex', marginBottom: '20px' }}>
             <span className="section-label">{co.ticker} stock performance</span>
           </div>
-          <StockChart ticker={co.ticker} color={co.color} />
+          <StockChart ticker={co.ticker} color={co.color} analystTarget={co.analystTarget} />
         </div>
       </section>
+
+      {/* ── Earnings & Blackout ─────────────────────────────────── */}
+      {earningsData[co.slug] && (
+        <section style={{ padding: '40px 28px 48px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+          <div style={{ maxWidth: '960px', margin: '0 auto' }}>
+            <div style={{ display: 'flex', marginBottom: '20px' }}>
+              <span className="section-label">{co.ticker} earnings & blackout</span>
+            </div>
+            {earningsData[co.slug].blackoutStart ? (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
+                {[
+                  {
+                    label: 'Next earnings',
+                    value: earningsData[co.slug].earningsDate,
+                    sub: earningsData[co.slug].quarter,
+                    icon: '📅',
+                    accent: co.color,
+                  },
+                  {
+                    label: 'Blackout starts',
+                    value: earningsData[co.slug].blackoutStart + ', 2026',
+                    sub: '~14 days before earnings',
+                    icon: '🔒',
+                    accent: '#ef4444',
+                  },
+                  {
+                    label: 'Blackout ends',
+                    value: earningsData[co.slug].blackoutEnd + ', 2026',
+                    sub: '2 business days after earnings',
+                    icon: '✅',
+                    accent: '#34d399',
+                  },
+                  {
+                    label: 'ACATS during blackout?',
+                    value: 'Generally yes',
+                    sub: 'Transfer ≠ sale — verify with your plan admin',
+                    icon: '↔️',
+                    accent: '#c4a97e',
+                  },
+                ].map((item) => (
+                  <div key={item.label} style={{
+                    background: 'var(--card)',
+                    border: '1px solid rgba(255,255,255,0.06)',
+                    borderRadius: '12px',
+                    padding: '16px 18px',
+                  }}>
+                    <div style={{ fontSize: '11px', color: '#4a5568', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>
+                      {item.label}
+                    </div>
+                    <div style={{ fontSize: '15px', fontWeight: '700', color: '#f0f2f5', marginBottom: '4px' }}>
+                      {item.value}
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#475569' }}>{item.sub}</div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ background: 'var(--card)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '18px 20px', fontSize: '14px', color: '#64748b' }}>
+                {earningsData[co.slug].earningsDate}
+              </div>
+            )}
+            <p style={{ fontSize: '11px', color: '#334155', marginTop: '12px', lineHeight: '1.6' }}>
+              Earnings dates are estimates for {earningsData[co.slug]?.quarter ?? 'the upcoming quarter'}. Blackout windows are approximate — actual dates are set by {co.name} and communicated to employees separately. ACATS share transfers are generally permitted during blackout periods (they are not sales), but always verify with your stock plan administrator.
+            </p>
+          </div>
+        </section>
+      )}
 
       {/* ── Calculators ──────────────────────────────────────── */}
       <section style={{ padding: '56px 28px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.015)' }}>
@@ -363,17 +429,6 @@ export default function CompanyPage({ params }) {
         </div>
       </section>
 
-      {/* ── ESPP calculator ──────────────────────────────────── */}
-      {companyGuides[co.slug]?.hasEspp && (
-        <section style={{ padding: '0 28px 56px' }}>
-          <div style={{ maxWidth: '960px', margin: '0 auto' }}>
-            <div style={{ display: 'flex', marginBottom: '20px' }}>
-              <span className="section-label">ESPP calculator</span>
-            </div>
-            <EsppCalculator company={co} />
-          </div>
-        </section>
-      )}
 
       {/* ── Guide content ────────────────────────────────────── */}
       <section style={{
@@ -431,8 +486,10 @@ export default function CompanyPage({ params }) {
                     transition: 'border-color 0.15s, color 0.15s',
                   }}>
                     {c.hasLogo
-                      ? <img src={`/logos/${c.slug}.png`} alt={c.name} width={14} height={14} style={{ objectFit: 'contain', opacity: 0.8 }} />
-                      : <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: c.color }} />
+                      ? <span style={{ width: '18px', height: '18px', borderRadius: '4px', background: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, overflow: 'hidden' }}>
+                          <img src={`/logos/${c.slug}.png`} alt={c.name} width={13} height={13} style={{ objectFit: 'contain', display: 'block' }} />
+                        </span>
+                      : <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: c.color, flexShrink: 0 }} />
                     }
                     {c.name} →
                   </Link>
