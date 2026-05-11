@@ -124,7 +124,7 @@ export const indiaTaxGuide = {
   title: 'India tax guide for US RSU holders',
   sections: [
     {
-      heading: 'RSU vesting: it's taxable income on Day 1',
+      heading: "RSU vesting: it's taxable income on Day 1",
       body: `When your RSUs vest, the fair market value of shares on the vest date is treated as a perquisite — a form of salary income under India's Income Tax Act. This means you owe tax in the year of vesting, regardless of whether you sell. The taxable amount is the number of shares vested × vest-day closing price, converted to INR using the SBI TT buying rate on that date.
 
 Most Indian employees at US tech companies are in the 30% slab plus 4% health and education cess, bringing the effective perquisite tax rate to 31.2%. Your employer's US payroll typically withholds a portion via sell-to-cover, but you must self-assess any balance in your India ITR.`,
