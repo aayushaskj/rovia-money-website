@@ -39,31 +39,15 @@ export default function StoriesPage() {
         </div>
 
         {/* Story cards */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {stories.map((s) => (
-            <Link
-              key={s.slug}
-              href={`/stories/${s.slug}`}
-              style={{ textDecoration: 'none' }}
-            >
+            <Link key={s.slug} href={`/stories/${s.slug}`} className="story-card" style={{ textDecoration: 'none' }}>
               <article style={{
                 background: '#0a1220',
                 border: '1px solid rgba(255,255,255,0.06)',
                 borderRadius: '16px',
                 padding: '28px 32px',
-                marginBottom: '12px',
-                cursor: 'pointer',
-                transition: 'border-color 0.15s, background 0.15s',
-              }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = 'rgba(196,169,126,0.25)';
-                  e.currentTarget.style.background = '#0c1628';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)';
-                  e.currentTarget.style.background = '#0a1220';
-                }}
-              >
+              }}>
                 <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
 
                   {/* Avatar */}
@@ -170,6 +154,16 @@ export default function StoriesPage() {
         </div>
 
       </div>
+
+      <style>{`
+        .story-card article {
+          transition: border-color 0.15s, background 0.15s;
+        }
+        .story-card:hover article {
+          border-color: rgba(196,169,126,0.25) !important;
+          background: #0c1628 !important;
+        }
+      `}</style>
     </div>
   );
 }

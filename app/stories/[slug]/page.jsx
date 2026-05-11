@@ -21,10 +21,9 @@ export async function generateMetadata({ params }) {
   };
 }
 
-// Render markdown-ish story text: **bold**, newlines → paragraphs
+// Render story text: **bold** sections, double newlines → paragraphs
 function renderStory(text) {
   return text.split('\n\n').map((block, i) => {
-    // Section heading (starts with **)
     if (block.startsWith('**') && block.endsWith('**')) {
       return (
         <h3 key={i} style={{
@@ -35,7 +34,6 @@ function renderStory(text) {
         </h3>
       );
     }
-    // Inline bold within paragraph
     const parts = block.split(/(\*\*[^*]+\*\*)/g).map((part, j) => {
       if (part.startsWith('**') && part.endsWith('**')) {
         return <strong key={j} style={{ color: '#f1f5f9', fontWeight: '700' }}>{part.slice(2, -2)}</strong>;
@@ -43,10 +41,7 @@ function renderStory(text) {
       return part;
     });
     return (
-      <p key={i} style={{
-        fontSize: '16px', lineHeight: '1.8', color: '#8892a4',
-        marginBottom: '20px',
-      }}>
+      <p key={i} style={{ fontSize: '16px', lineHeight: '1.8', color: '#8892a4', marginBottom: '20px' }}>
         {parts}
       </p>
     );
@@ -65,10 +60,7 @@ export default function StoryPage({ params }) {
 
         {/* Breadcrumb */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '40px' }}>
-          <Link href="/stories" style={{ fontSize: '13px', color: '#475569', textDecoration: 'none' }}
-            onMouseEnter={e => e.currentTarget.style.color = '#94a3b8'}
-            onMouseLeave={e => e.currentTarget.style.color = '#475569'}
-          >
+          <Link href="/stories" className="breadcrumb-link" style={{ fontSize: '13px', color: '#475569', textDecoration: 'none' }}>
             Stories
           </Link>
           <span style={{ color: '#334155', fontSize: '12px' }}>›</span>
@@ -168,7 +160,7 @@ export default function StoryPage({ params }) {
             fontSize: '18px', fontWeight: '600', color: '#cbd5e1',
             lineHeight: '1.6', fontStyle: 'italic', letterSpacing: '-0.01em',
           }}>
-            "{s.pullquote}"
+            &ldquo;{s.pullquote}&rdquo;
           </p>
           <footer style={{ fontSize: '13px', color: '#475569', marginTop: '8px' }}>
             — {s.name}, {s.role} at {s.company}
@@ -209,18 +201,14 @@ export default function StoryPage({ params }) {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {others.map((o) => (
-                <Link key={o.slug} href={`/stories/${o.slug}`} style={{ textDecoration: 'none' }}>
+                <Link key={o.slug} href={`/stories/${o.slug}`} className="more-story-card" style={{ textDecoration: 'none' }}>
                   <div style={{
                     padding: '16px 20px',
                     background: '#0a1220',
                     border: '1px solid rgba(255,255,255,0.05)',
                     borderRadius: '12px',
                     display: 'flex', alignItems: 'center', gap: '14px',
-                    transition: 'border-color 0.15s',
-                  }}
-                    onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'}
-                    onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)'}
-                  >
+                  }}>
                     <div style={{
                       width: '36px', height: '36px', borderRadius: '50%',
                       background: o.avatarColor + '22', border: `1px solid ${o.avatarColor}44`,
@@ -246,6 +234,12 @@ export default function StoryPage({ params }) {
         )}
 
       </div>
+
+      <style>{`
+        .breadcrumb-link:hover { color: #94a3b8 !important; }
+        .more-story-card div { transition: border-color 0.15s; }
+        .more-story-card:hover div { border-color: rgba(255,255,255,0.12) !important; }
+      `}</style>
     </div>
   );
 }
