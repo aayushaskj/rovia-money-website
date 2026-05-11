@@ -125,6 +125,19 @@ export default function Navbar() {
           </div>
 
           <Link
+            href="/tools"
+            style={{
+              color: '#8892a4', fontSize: '14px', fontWeight: '500',
+              padding: '7px 14px', textDecoration: 'none', borderRadius: '999px',
+              transition: 'color 0.15s',
+            }}
+            onMouseEnter={e => e.currentTarget.style.color = '#f0f2f5'}
+            onMouseLeave={e => e.currentTarget.style.color = '#8892a4'}
+          >
+            Tools
+          </Link>
+
+          <Link
             href="/stories"
             style={{
               color: '#8892a4', fontSize: '14px', fontWeight: '500',
@@ -226,6 +239,8 @@ export default function Navbar() {
             </div>
           ))}
           <div style={{ marginTop: '12px', display: 'flex', gap: '16px', paddingTop: '8px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+            <Link href="/tools" onClick={() => setOpen(false)} style={{ color: '#8892a4', textDecoration: 'none', fontSize: '14px' }}>Tools</Link>
+            <Link href="/stories" onClick={() => setOpen(false)} style={{ color: '#8892a4', textDecoration: 'none', fontSize: '14px' }}>Stories</Link>
             <a href="https://vested.blog" target="_blank" rel="noopener noreferrer" style={{ color: '#8892a4', textDecoration: 'none', fontSize: '14px' }}>Blog</a>
           </div>
         </div>
