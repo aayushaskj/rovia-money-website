@@ -24,7 +24,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <img
-              src="/rovia-logo-white.png"
+              src="/rovia-logo-dark.png"
               alt="Rovia"
               style={{ height: '40px', width: 'auto', marginBottom: '12px', display: 'block' }}
             />

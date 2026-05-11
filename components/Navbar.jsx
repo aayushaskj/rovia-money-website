@@ -33,7 +33,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0 }}>
           <img
-            src="/rovia-logo-white.png"
+            src="/rovia-logo-dark.png"
             alt="Rovia"
             height={48}
             style={{ height: '48px', width: 'auto', display: 'block' }}

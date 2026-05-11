@@ -304,10 +304,35 @@ function AdvantageCalc({ company }) {
   );
 }
 
+// ─── Approximate prices as of May 2026 (for upside-to-target calc) ───────────
+
+const APPROX_PRICES = {
+  google: 402,
+  meta: 609,
+  microsoft: 415,
+  amazon: 270,
+  apple: 293,
+  nvidia: 215,
+  netflix: 960,
+  intel: 47,
+  oracle: 192,
+  salesforce: 241,
+  amd: 461,
+  uber: 70,
+  datadog: 145,
+  snowflake: 180,
+  servicenow: 1060,
+  adobe: 375,
+  qualcomm: 165,
+  broadcom: 260,
+  palantir: 120,
+  workday: 260,
+};
+
 // ─── Calculator 2: Diversification ───────────────────────────────────────────
 
 function DiversifyCalc({ company }) {
-  const [portfolioUSD, setPortfolioUSD] = useState(100000);
+  const [portfolioUSD, setPortfolioUSD] = useState(200000);
   const [divPct, setDivPct] = useState(30);
 
   const defaults = ALL_COMPANIES.filter((c) => c.slug !== company.slug).slice(0, 3);
@@ -315,7 +340,7 @@ function DiversifyCalc({ company }) {
 
   const divAmount    = portfolioUSD * (divPct / 100);
   const remainAmount = portfolioUSD - divAmount;
-  const perStock     = divAmount / picks.length;
+  const perStock     = picks.length > 0 ? divAmount / picks.length : 0;
 
   const handlePick = (index, slug) => {
     const next = [...picks];
@@ -323,12 +348,50 @@ function DiversifyCalc({ company }) {
     setPicks(next);
   };
 
+  // Compute upside ratio for a company (target / currentPrice)
+  const getUpsideRatio = (co) => {
+    if (!co) return null;
+    const target = parseTarget(co.analystTarget);
+    const price  = APPROX_PRICES[co.slug];
+    if (!target || !price) return null;
+    return target / price;
+  };
+  const getUpsidePct = (co) => {
+    const r = getUpsideRatio(co);
+    return r ? (r - 1) * 100 : null;
+  };
+
+  // Main company
+  const mainUpsideRatio = getUpsideRatio(company) ?? 1;
+  const mainUpsidePct   = getUpsidePct(company);
+  const mainTarget      = parseTarget(company.analystTarget);
+
+  // Projected values at analyst targets
+  const projectedRemain = remainAmount * mainUpsideRatio;
+  const pickData = picks.map((slug) => {
+    const c = getCompany(slug);
+    const ratio = getUpsideRatio(c) ?? 1;
+    return {
+      c,
+      alloc: perStock,
+      projected: perStock * ratio,
+      upsidePct: getUpsidePct(c),
+      target: parseTarget(c?.analystTarget),
+      price: APPROX_PRICES[c?.slug] ?? null,
+    };
+  });
+  const projectedDiversified = projectedRemain + pickData.reduce((s, d) => s + d.projected, 0);
+  const projectedConcentrated = portfolioUSD * mainUpsideRatio;
+  const blendedUpside = ((projectedDiversified - portfolioUSD) / portfolioUSD) * 100;
+  const concentratedUpside = ((projectedConcentrated - portfolioUSD) / portfolioUSD) * 100;
+
   return (
     <div>
       <p style={{ fontSize: '14px', color: '#8892a4', marginBottom: '24px', lineHeight: '1.6' }}>
-        RSU concentration risk is real. See what it looks like to move a slice of your {company.ticker} holdings into other US stocks — all manageable inside Rovia.
+        RSU concentration risk is real. Pick stocks to diversify into and see how analyst consensus targets compare to staying all-in on {company.ticker}.
       </p>
 
+      {/* Sliders */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '28px' }} className="calc-sliders">
         <PremiumSlider
           label="Total RSU portfolio"
@@ -351,8 +414,8 @@ function DiversifyCalc({ company }) {
       </div>
 
       {/* Allocation bar */}
-      <div style={{ marginBottom: '24px' }}>
-        <div style={{ display: 'flex', gap: '2px', borderRadius: '8px', overflow: 'hidden', height: '10px', marginBottom: '10px' }}>
+      <div style={{ marginBottom: '28px' }}>
+        <div style={{ display: 'flex', gap: '2px', borderRadius: '8px', overflow: 'hidden', height: '8px', marginBottom: '10px' }}>
           <div style={{ flex: 100 - divPct, background: company.color + '90', transition: 'flex 0.2s' }} />
           {picks.map((slug, i) => {
             const c = getCompany(slug);
@@ -363,15 +426,26 @@ function DiversifyCalc({ company }) {
         </div>
         <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
           <span style={{ fontSize: '12px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ width: '8px', height: '8px', borderRadius: '2px', background: company.color, display: 'inline-block' }} />
-            {company.ticker} · {100 - divPct}% · ${Math.round(remainAmount).toLocaleString('en-US')}
+            <span style={{ width: '7px', height: '7px', borderRadius: '2px', background: company.color, display: 'inline-block', flexShrink: 0 }} />
+            {company.ticker} · {100 - divPct}% · {usd(remainAmount)}
+            {mainUpsidePct !== null && (
+              <span style={{ color: mainUpsidePct >= 0 ? '#34d399' : '#fca5a5', fontSize: '11px', fontWeight: '600' }}>
+                ({mainUpsidePct >= 0 ? '+' : ''}{mainUpsidePct.toFixed(0)}% to target)
+              </span>
+            )}
           </span>
           {picks.map((slug, i) => {
             const c = getCompany(slug);
+            const up = getUpsidePct(c);
             return (
               <span key={slug + i} style={{ fontSize: '12px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ width: '8px', height: '8px', borderRadius: '2px', background: c?.color || '#3b82f6', display: 'inline-block' }} />
-                {c?.ticker} · {Math.round(divPct / picks.length)}% · ${Math.round(perStock).toLocaleString('en-US')}
+                <span style={{ width: '7px', height: '7px', borderRadius: '2px', background: c?.color || '#3b82f6', display: 'inline-block', flexShrink: 0 }} />
+                {c?.ticker} · {Math.round(divPct / picks.length)}% · {usd(perStock)}
+                {up !== null && (
+                  <span style={{ color: up >= 0 ? '#34d399' : '#fca5a5', fontSize: '11px', fontWeight: '600' }}>
+                    ({up >= 0 ? '+' : ''}{up.toFixed(0)}%)
+                  </span>
+                )}
               </span>
             );
           })}
@@ -379,51 +453,155 @@ function DiversifyCalc({ company }) {
       </div>
 
       {/* Pick cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px', marginBottom: '20px' }}>
-        {picks.map((slug, i) => {
-          const c = getCompany(slug);
-          return (
-            <div key={i} style={{
-              background: '#080d18',
-              border: `1px solid ${c?.color || '#3b82f6'}28`,
-              borderRadius: '12px',
-              padding: '14px',
-            }}>
-              <select
-                value={slug}
-                onChange={(e) => handlePick(i, e.target.value)}
-                style={{
-                  width: '100%',
-                  background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.1)',
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: '12px', marginBottom: '20px' }}>
+        {pickData.map(({ c, alloc, projected, upsidePct, target, price }, i) => (
+          <div key={i} style={{
+            background: '#080d18',
+            border: `1px solid ${c?.color || '#3b82f6'}28`,
+            borderRadius: '12px',
+            padding: '14px',
+          }}>
+            {/* Dropdown */}
+            <select
+              value={picks[i]}
+              onChange={(e) => handlePick(i, e.target.value)}
+              style={{
+                width: '100%',
+                background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '6px',
+                color: '#f1f5f9',
+                fontSize: '12px',
+                padding: '6px 8px',
+                marginBottom: '10px',
+                cursor: 'pointer',
+                outline: 'none',
+              }}
+            >
+              {ALL_COMPANIES
+                .filter((ac) => ac.slug !== company.slug && (!picks.includes(ac.slug) || ac.slug === picks[i]))
+                .map((ac) => (
+                  <option key={ac.slug} value={ac.slug} style={{ background: '#0f1828' }}>
+                    {ac.name} ({ac.ticker})
+                  </option>
+                ))}
+            </select>
+
+            {/* Name + ticker */}
+            <div style={{ fontSize: '13px', fontWeight: '600', color: '#f1f5f9', marginBottom: '1px' }}>{c?.name}</div>
+            <div style={{ fontSize: '11px', color: '#475569', marginBottom: '12px' }}>{c?.ticker}</div>
+
+            {/* Target + Upside chips */}
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+              {target && (
+                <div style={{
+                  background: 'rgba(196,169,126,0.08)',
+                  border: '1px solid rgba(196,169,126,0.2)',
                   borderRadius: '6px',
-                  color: '#f1f5f9',
-                  fontSize: '12px',
-                  padding: '6px 8px',
-                  marginBottom: '10px',
-                  cursor: 'pointer',
-                  outline: 'none',
-                }}
-              >
-                {ALL_COMPANIES
-                  .filter((ac) => ac.slug !== company.slug && (!picks.includes(ac.slug) || ac.slug === slug))
-                  .map((ac) => (
-                    <option key={ac.slug} value={ac.slug} style={{ background: '#0f1828' }}>
-                      {ac.name} ({ac.ticker})
-                    </option>
-                  ))}
-              </select>
-              <div style={{ fontSize: '13px', fontWeight: '600', color: '#f1f5f9', marginBottom: '2px' }}>{c?.name}</div>
-              <div style={{ fontSize: '11px', color: '#475569', marginBottom: '10px' }}>{c?.ticker}</div>
-              <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '8px', display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '11px', color: '#475569' }}>Allocation</span>
-                <span style={{ fontSize: '12px', fontWeight: '700', color: 'var(--gold)' }}>${Math.round(perStock).toLocaleString('en-US')}</span>
-              </div>
+                  padding: '5px 10px',
+                  flex: 1,
+                }}>
+                  <div style={{ fontSize: '9px', color: '#64748b', marginBottom: '2px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Target</div>
+                  <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--gold)' }}>${target.toLocaleString('en-US')}</div>
+                </div>
+              )}
+              {upsidePct !== null && (
+                <div style={{
+                  background: upsidePct >= 0 ? 'rgba(52,211,153,0.06)' : 'rgba(252,165,165,0.06)',
+                  border: `1px solid ${upsidePct >= 0 ? 'rgba(52,211,153,0.2)' : 'rgba(252,165,165,0.2)'}`,
+                  borderRadius: '6px',
+                  padding: '5px 10px',
+                  flex: 1,
+                }}>
+                  <div style={{ fontSize: '9px', color: '#64748b', marginBottom: '2px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Upside</div>
+                  <div style={{ fontSize: '13px', fontWeight: '700', color: upsidePct >= 0 ? '#34d399' : '#fca5a5' }}>
+                    {upsidePct >= 0 ? '+' : ''}{upsidePct.toFixed(0)}%
+                  </div>
+                </div>
+              )}
             </div>
-          );
-        })}
+
+            {/* Allocation + projected */}
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '10px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                <span style={{ fontSize: '11px', color: '#475569' }}>Allocation</span>
+                <span style={{ fontSize: '12px', fontWeight: '600', color: '#94a3b8' }}>{usd(alloc)}</span>
+              </div>
+              {upsidePct !== null && (
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: '11px', color: '#475569' }}>At target →</span>
+                  <span style={{ fontSize: '12px', fontWeight: '700', color: 'var(--gold)' }}>{usd(projected)}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
       </div>
 
+      {/* Portfolio outlook summary */}
+      <div style={{
+        background: 'linear-gradient(135deg, rgba(196,169,126,0.08) 0%, rgba(196,169,126,0.03) 100%)',
+        border: '1px solid rgba(196,169,126,0.2)',
+        borderRadius: '14px',
+        padding: '20px 24px',
+        marginBottom: '12px',
+      }}>
+        <div style={{ fontSize: '11px', fontWeight: '700', color: '#4a5568', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '16px' }}>
+          Portfolio Outlook · If Analyst Targets Are Hit
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          {/* Concentrated */}
+          <div>
+            <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '6px' }}>
+              All-in {company.ticker} (no change)
+            </div>
+            <div style={{ fontSize: 'clamp(20px, 3vw, 28px)', fontWeight: '800', color: '#94a3b8', letterSpacing: '-0.02em', lineHeight: 1 }}>
+              {usd(projectedConcentrated)}
+            </div>
+            {mainUpsidePct !== null && (
+              <div style={{ fontSize: '12px', color: concentratedUpside >= 0 ? '#64748b' : '#fca5a5', marginTop: '4px' }}>
+                {concentratedUpside >= 0 ? '+' : ''}{concentratedUpside.toFixed(0)}% blended upside
+              </div>
+            )}
+          </div>
+          {/* Diversified */}
+          <div>
+            <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '6px' }}>
+              Diversified ({divPct}% spread across picks)
+            </div>
+            <div style={{ fontSize: 'clamp(20px, 3vw, 28px)', fontWeight: '800', color: 'var(--gold)', letterSpacing: '-0.02em', lineHeight: 1 }}>
+              {usd(projectedDiversified)}
+            </div>
+            <div style={{ fontSize: '12px', color: blendedUpside >= 0 ? '#34d399' : '#fca5a5', marginTop: '4px' }}>
+              {blendedUpside >= 0 ? '+' : ''}{blendedUpside.toFixed(0)}% blended upside
+            </div>
+          </div>
+        </div>
+        {projectedDiversified > projectedConcentrated && (
+          <div style={{
+            marginTop: '14px',
+            paddingTop: '14px',
+            borderTop: '1px solid rgba(255,255,255,0.05)',
+            fontSize: '12px',
+            color: '#34d399',
+          }}>
+            ↑ Analyst targets imply {usd(projectedDiversified - projectedConcentrated)} more in the diversified portfolio.
+          </div>
+        )}
+        {projectedConcentrated > projectedDiversified && (
+          <div style={{
+            marginTop: '14px',
+            paddingTop: '14px',
+            borderTop: '1px solid rgba(255,255,255,0.05)',
+            fontSize: '12px',
+            color: '#f59e0b',
+          }}>
+            ↑ {company.ticker} has stronger implied upside — try different diversification picks.
+          </div>
+        )}
+      </div>
+
+      {/* Disclaimer */}
       <div style={{
         background: 'rgba(255,255,255,0.02)',
         border: '1px solid rgba(255,255,255,0.06)',
@@ -433,7 +611,7 @@ function DiversifyCalc({ company }) {
         color: '#4a5568',
         lineHeight: '1.6',
       }}>
-        Analyst targets are consensus estimates, not guarantees. Diversification reduces single-stock risk but does not eliminate market risk. Illustrative only.
+        Analyst targets and stock prices are approximate May 2026 consensus estimates. Not investment advice. Consult a SEBI-registered advisor.
       </div>
     </div>
   );
