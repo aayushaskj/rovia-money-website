@@ -128,6 +128,19 @@ export default function Navbar() {
             )}
           </div>
 
+          <Link
+            href="/stories"
+            style={{
+              color: '#8892a4', fontSize: '14px', fontWeight: '500',
+              padding: '7px 14px', textDecoration: 'none', borderRadius: '999px',
+              transition: 'color 0.15s',
+            }}
+            onMouseEnter={e => e.currentTarget.style.color = '#f0f2f5'}
+            onMouseLeave={e => e.currentTarget.style.color = '#8892a4'}
+          >
+            Stories
+          </Link>
+
           <a
             href="https://vested.blog" target="_blank" rel="noopener noreferrer"
             style={{
