@@ -3,71 +3,203 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Canela font-face declarations ──────────────────────────── */
+@font-face {
+  font-family: 'Canela';
+  src: url('/fonts/Canela-Light-Trial.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Canela';
+  src: url('/fonts/Canela-LightItalic-Trial.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Canela';
+  src: url('/fonts/Canela-Regular-Trial.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Canela';
+  src: url('/fonts/Canela-RegularItalic-Trial.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Canela';
+  src: url('/fonts/Canela-Medium-Trial.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Canela';
+  src: url('/fonts/Canela-Bold-Trial.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Design tokens ───────────────────────────────────────────── */
 :root {
-  --bg: #080d18;
-  --card: #0f1828;
-  --border: rgba(255, 255, 255, 0.08);
-  --primary: #3b82f6;
-  --gold: #f59e0b;
+  /* Backgrounds */
+  --bg:          #020917;
+  --bg-subtle:   #060f22;
+  --card:        #0a1628;
+  --card-raised: #0f1e36;
+
+  /* Borders */
+  --border:      rgba(255, 255, 255, 0.06);
+  --border-md:   rgba(255, 255, 255, 0.10);
+
+  /* Brand — Rovia gold */
+  --gold:        #C4A97E;
+  --gold-light:  #dcc49e;
+  --gold-dark:   #a08560;
+  --gold-subtle: rgba(196, 169, 126, 0.12);
+  --gold-border: rgba(196, 169, 126, 0.22);
+
+  /* Brand — Rovia navy (text on light backgrounds) */
+  --navy:        #012966;
+  --navy-light:  #0a3a80;
+
+  /* Data / chart blue (functional UI only) */
+  --blue:        #3b82f6;
+  --blue-subtle: rgba(59, 130, 246, 0.10);
+
+  /* Text */
+  --text-primary:   #f0f2f5;
+  --text-secondary: #8892a4;
+  --text-muted:     #4a5568;
 }
 
-* {
-  box-sizing: border-box;
-}
+/* ── Reset & base ────────────────────────────────────────────── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
   background-color: var(--bg);
-  color: #f1f5f9;
+  color: var(--text-primary);
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-::selection {
-  background: rgba(59, 130, 246, 0.3);
+/* ── Canela italic utility — the signature Rovia accent ──────── */
+.canela {
+  font-family: 'Canela', Georgia, serif;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--gold);
 }
 
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg);
-}
-::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 3px;
-}
-
-/* Gradient text utility */
-.gradient-text {
-  background: linear-gradient(135deg, #f1f5f9 0%, #94a3b8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* ── Section label pill ──────────────────────────────────────── */
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--gold-subtle);
+  border: 1px solid var(--gold-border);
+  border-radius: 999px;
+  padding: 4px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
-.gradient-text-blue {
-  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* ── Pill button — primary (champagne) ───────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--gold);
+  color: #012966;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 11px 26px;
+  border-radius: 999px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  letter-spacing: -0.01em;
+}
+.btn-primary:hover {
+  background: var(--gold-light);
+  transform: translateY(-1px);
 }
 
-/* Noise texture overlay */
-.noise::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 0;
+/* ── Pill button — secondary (dark navy) ─────────────────────── */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--navy);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 11px 26px;
+  border-radius: 999px;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.08);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+.btn-secondary:hover {
+  background: var(--navy-light);
+  transform: translateY(-1px);
 }
 
-/* Step connector line */
+/* ── Ghost pill button ───────────────────────────────────────── */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.05);
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 22px;
+  border-radius: 999px;
+  text-decoration: none;
+  border: 1px solid var(--border-md);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-ghost:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-primary);
+}
+
+/* ── Card base ───────────────────────────────────────────────── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.card:hover {
+  border-color: var(--border-md);
+}
+
+/* ── Selection & scrollbar ───────────────────────────────────── */
+::selection { background: rgba(196, 169, 126, 0.25); }
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+
+/* ── Step connector ──────────────────────────────────────────── */
 .step-line::before {
   content: '';
   position: absolute;
@@ -75,5 +207,5 @@ body {
   top: 40px;
   bottom: -20px;
   width: 2px;
-  background: linear-gradient(180deg, rgba(59, 130, 246, 0.4) 0%, transparent 100%);
+  background: linear-gradient(180deg, var(--gold-border) 0%, transparent 100%);
 }

@@ -5,7 +5,6 @@ import { companyGuides } from '@/data/guides';
 import GuideContent from '@/components/GuideContent';
 import dynamic from 'next/dynamic';
 
-// Client components — loaded dynamically to keep server bundle lean
 const StockChart    = dynamic(() => import('@/components/StockChart'),    { ssr: false });
 const RsuCalculators = dynamic(() => import('@/components/RsuCalculators'), { ssr: false });
 const EsppCalculator = dynamic(() => import('@/components/EsppCalculator').then(m => ({ default: m.default })), { ssr: false });
@@ -37,579 +36,295 @@ export default function CompanyPage({ params }) {
 
   return (
     <div style={{ minHeight: '100vh' }}>
-      {/* Hero */}
-      <section
-        style={{
-          padding: '64px 24px 48px',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        {/* Background glow */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '-80px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: '700px',
-            height: '400px',
-            background: `radial-gradient(ellipse, ${co.color}18 0%, transparent 70%)`,
-            pointerEvents: 'none',
-          }}
-        />
 
-        <div style={{ maxWidth: '760px', margin: '0 auto', position: 'relative' }}>
-          {/* Company logo + badge */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '28px' }}>
-            {/* Logo mark */}
-            <div
-              style={{
-                width: '56px',
-                height: '56px',
-                borderRadius: '14px',
-                background: 'rgba(255,255,255,0.06)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                overflow: 'hidden',
-                flexShrink: 0,
-              }}
-            >
-              {co.hasLogo ? (
-                <img
-                  src={`/logos/${co.slug}.png`}
-                  alt={co.name}
-                  width={36}
-                  height={36}
-                  style={{ objectFit: 'contain' }}
-                />
-              ) : (
-                <span style={{ fontSize: '22px', fontWeight: '800', color: co.color }}>
-                  {co.name[0]}
-                </span>
-              )}
+      {/* ── Hero ────────────────────────────────────────────── */}
+      <section style={{ padding: '72px 28px 56px', position: 'relative', overflow: 'hidden' }}>
+        {/* Glow */}
+        <div style={{
+          position: 'absolute', top: '-100px', left: '50%',
+          transform: 'translateX(-50%)',
+          width: '800px', height: '500px',
+          background: `radial-gradient(ellipse, ${co.color}12 0%, transparent 65%)`,
+          pointerEvents: 'none',
+        }} />
+
+        <div style={{ maxWidth: '800px', margin: '0 auto', position: 'relative' }}>
+
+          {/* Logo + badge row */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '32px' }}>
+            <div style={{
+              width: '72px', height: '72px', borderRadius: '18px',
+              background: 'rgba(255,255,255,0.07)',
+              border: '1px solid rgba(255,255,255,0.12)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              overflow: 'hidden', flexShrink: 0,
+              boxShadow: `0 0 0 1px ${co.color}22, 0 8px 32px rgba(0,0,0,0.4)`,
+            }}>
+              {co.hasLogo
+                ? <img src={`/logos/${co.slug}.png`} alt={co.name} width={48} height={48} style={{ objectFit: 'contain' }} />
+                : <span style={{ fontSize: '28px', fontWeight: '800', color: co.color }}>{co.name[0]}</span>
+              }
             </div>
 
-            {/* Pill badge */}
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                background: co.color + '18',
-                border: `1px solid ${co.color}30`,
-                borderRadius: '999px',
-                padding: '5px 14px',
-                fontSize: '12px',
-                fontWeight: '600',
-                color: co.color,
-                letterSpacing: '0.02em',
-              }}
-            >
-              <span
-                style={{
-                  width: '6px',
-                  height: '6px',
-                  borderRadius: '50%',
-                  background: co.color,
-                }}
-              />
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: '8px',
+              background: `${co.color}14`,
+              border: `1px solid ${co.color}28`,
+              borderRadius: '999px', padding: '5px 16px',
+              fontSize: '12px', fontWeight: '600', color: co.color,
+              letterSpacing: '0.02em',
+            }}>
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: co.color }} />
               {co.name} · {co.ticker} · {co.brokerShortName}
             </div>
           </div>
 
           {/* Headline */}
-          <h1
-            style={{
-              fontSize: 'clamp(28px, 4.5vw, 50px)',
-              fontWeight: '800',
-              lineHeight: '1.1',
-              letterSpacing: '-0.03em',
-              color: '#f1f5f9',
-              marginBottom: '20px',
-              whiteSpace: 'pre-line',
-            }}
-          >
+          <h1 style={{
+            fontSize: 'clamp(30px, 5vw, 56px)',
+            fontWeight: '800',
+            lineHeight: '1.08',
+            letterSpacing: '-0.03em',
+            color: '#f0f2f5',
+            marginBottom: '18px',
+            whiteSpace: 'pre-line',
+          }}>
             {co.headline}
           </h1>
 
-          <p
-            style={{
-              fontSize: '16px',
-              color: '#94a3b8',
-              lineHeight: '1.7',
-              marginBottom: '32px',
-              maxWidth: '620px',
-            }}
-          >
+          <p style={{
+            fontSize: '16px', color: '#8892a4', lineHeight: '1.75',
+            marginBottom: '36px', maxWidth: '640px',
+          }}>
             {co.subheadline}
           </p>
 
           {/* CTAs */}
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '40px' }}>
-            <a
-              href="https://rovia.one"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                background: '#3b82f6',
-                color: 'white',
-                fontSize: '15px',
-                fontWeight: '600',
-                padding: '12px 28px',
-                borderRadius: '8px',
-                textDecoration: 'none',
-                letterSpacing: '-0.01em',
-              }}
-            >
-              Move to Rovia →
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '48px' }}>
+            <a href="https://rovia.onelink.me/xOtI/yjxw13ya" target="_blank" rel="noopener noreferrer" className="btn-primary">
+              Transfer to Rovia →
             </a>
-            <a
-              href={co.brokerGuideUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                color: '#e2e8f0',
-                fontSize: '14px',
-                fontWeight: '500',
-                padding: '12px 20px',
-                borderRadius: '8px',
-                textDecoration: 'none',
-              }}
-            >
+            <a href={co.brokerGuideUrl} target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: '13px' }}>
               {co.brokerGuideLabel}
             </a>
           </div>
 
           {/* Stat strip */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-              gap: '12px',
-            }}
-          >
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+            gap: '12px',
+          }}>
             {[
-              { label: 'Ticker', value: co.ticker },
-              { label: 'Current broker', value: co.brokerShortName },
-              { label: 'Vest cycle', value: co.vestCycle },
-              { label: 'Analyst target', value: co.analystTarget },
+              { label: 'Ticker',          value: co.ticker },
+              { label: 'Current broker',  value: co.brokerShortName },
+              { label: 'Vest cycle',      value: co.vestCycle },
+              { label: 'Analyst target',  value: co.analystTarget },
             ].map((s) => (
-              <div
-                key={s.label}
-                style={{
-                  background: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(255,255,255,0.06)',
-                  borderRadius: '8px',
-                  padding: '12px 16px',
-                }}
-              >
-                <div style={{ fontSize: '11px', color: '#475569', marginBottom: '4px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+              <div key={s.label} style={{
+                background: 'rgba(255,255,255,0.025)',
+                border: '1px solid rgba(255,255,255,0.06)',
+                borderRadius: '10px', padding: '14px 18px',
+              }}>
+                <div style={{ fontSize: '11px', color: '#4a5568', marginBottom: '5px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                   {s.label}
                 </div>
-                <div style={{ fontSize: '14px', fontWeight: '600', color: '#e2e8f0' }}>{s.value}</div>
+                <div style={{ fontSize: '14px', fontWeight: '700', color: '#f0f2f5' }}>{s.value}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Pain points */}
-      <section
-        style={{
-          padding: '48px 24px',
-          borderTop: '1px solid rgba(255,255,255,0.05)',
-          background: 'rgba(255,255,255,0.01)',
-        }}
-      >
-        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <h2
-            style={{
-              fontSize: '13px',
-              fontWeight: '600',
-              color: '#475569',
-              textTransform: 'uppercase',
-              letterSpacing: '0.08em',
-              marginBottom: '24px',
-            }}
-          >
-            What {co.brokerShortName} costs you
-          </h2>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-              gap: '12px',
-            }}
-          >
+      {/* ── Pain points ─────────────────────────────────────── */}
+      <section style={{ padding: '56px 28px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.015)' }}>
+        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '28px' }}>
+            <span className="section-label">What {co.brokerShortName} costs you</span>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '14px' }}>
             {co.painPoints.map((p) => (
-              <div
-                key={p.title}
-                style={{
-                  background: '#0f1828',
-                  border: '1px solid rgba(239, 68, 68, 0.15)',
-                  borderRadius: '12px',
-                  padding: '20px',
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: '20px',
-                    marginBottom: '10px',
-                    width: '36px',
-                    height: '36px',
-                    background: 'rgba(239,68,68,0.08)',
-                    borderRadius: '8px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
+              <div key={p.title} style={{
+                background: 'var(--card)',
+                border: '1px solid rgba(239,68,68,0.12)',
+                borderRadius: '14px', padding: '22px',
+              }}>
+                <div style={{
+                  fontSize: '18px', marginBottom: '12px',
+                  width: '38px', height: '38px',
+                  background: 'rgba(239,68,68,0.07)',
+                  borderRadius: '9px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
                   {p.icon}
                 </div>
-                <h3
-                  style={{
-                    fontSize: '14px',
-                    fontWeight: '600',
-                    color: '#fca5a5',
-                    marginBottom: '8px',
-                  }}
-                >
-                  {p.title}
-                </h3>
-                <p style={{ fontSize: '13px', color: '#64748b', lineHeight: '1.6' }}>{p.detail}</p>
+                <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#fca5a5', marginBottom: '8px' }}>{p.title}</h3>
+                <p style={{ fontSize: '13px', color: '#8892a4', lineHeight: '1.7' }}>{p.detail}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Migration guide */}
-      <section style={{ padding: '56px 24px' }}>
-        <div style={{ maxWidth: '720px', margin: '0 auto' }}>
-          <div style={{ marginBottom: '36px' }}>
-            <h2
-              style={{
-                fontSize: 'clamp(20px, 3vw, 28px)',
-                fontWeight: '700',
-                color: '#f1f5f9',
-                letterSpacing: '-0.02em',
-                marginBottom: '8px',
-              }}
-            >
-              How to move your {co.ticker} RSUs to Rovia
+      {/* ── Migration guide ──────────────────────────────────── */}
+      <section style={{ padding: '72px 28px' }}>
+        <div style={{ maxWidth: '760px', margin: '0 auto' }}>
+          <div style={{ marginBottom: '40px' }}>
+            <div style={{ display: 'flex', marginBottom: '20px' }}>
+              <span className="section-label">Step-by-step transfer</span>
+            </div>
+            <h2 style={{
+              fontSize: 'clamp(22px, 3vw, 34px)',
+              fontWeight: '800', color: '#f0f2f5',
+              letterSpacing: '-0.02em', marginBottom: '8px', lineHeight: '1.1',
+            }}>
+              How to transfer your {co.ticker} RSUs{' '}
+              <span className="canela" style={{ fontSize: 'clamp(24px, 3.2vw, 37px)' }}>to Rovia</span>
             </h2>
-            <p style={{ fontSize: '14px', color: '#64748b' }}>
-              A step-by-step ACATS transfer from {co.brokerName}.
+            <p style={{ fontSize: '14px', color: '#8892a4' }}>
+              Everything is done inside Rovia — takes about 2 minutes.
             </p>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
             {co.steps.map((step, i) => (
-              <div
-                key={step.n}
-                style={{
-                  display: 'flex',
-                  gap: '20px',
-                  paddingBottom: i < co.steps.length - 1 ? '0' : '0',
-                  position: 'relative',
-                }}
-              >
-                {/* Connector line */}
+              <div key={step.n} style={{ display: 'flex', gap: '20px', position: 'relative' }}>
                 {i < co.steps.length - 1 && (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      left: '19px',
-                      top: '40px',
-                      bottom: '-4px',
-                      width: '2px',
-                      background: 'linear-gradient(180deg, rgba(59,130,246,0.3) 0%, transparent 100%)',
-                    }}
-                  />
+                  <div style={{
+                    position: 'absolute', left: '19px', top: '42px', bottom: '-4px',
+                    width: '2px',
+                    background: 'linear-gradient(180deg, var(--gold-border) 0%, transparent 100%)',
+                  }} />
                 )}
-
-                {/* Step number */}
                 <div style={{ flexShrink: 0 }}>
-                  <div
-                    style={{
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: '50%',
-                      background: 'rgba(59,130,246,0.12)',
-                      border: '1px solid rgba(59,130,246,0.3)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '12px',
-                      fontWeight: '700',
-                      color: '#60a5fa',
-                    }}
-                  >
+                  <div style={{
+                    width: '40px', height: '40px', borderRadius: '50%',
+                    background: 'var(--gold-subtle)',
+                    border: '1px solid var(--gold-border)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '12px', fontWeight: '700', color: 'var(--gold)',
+                  }}>
                     {step.n}
                   </div>
                 </div>
-
-                {/* Content */}
                 <div style={{ paddingBottom: '32px', flex: 1 }}>
-                  <h3
-                    style={{
-                      fontSize: '15px',
-                      fontWeight: '600',
-                      color: '#f1f5f9',
-                      marginBottom: '6px',
-                      paddingTop: '8px',
-                    }}
-                  >
+                  <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#f0f2f5', marginBottom: '6px', paddingTop: '8px' }}>
                     {step.title}
                   </h3>
-                  <p style={{ fontSize: '13px', color: '#64748b', lineHeight: '1.7' }}>
-                    {step.detail}
-                  </p>
+                  <p style={{ fontSize: '13px', color: '#8892a4', lineHeight: '1.75' }}>{step.detail}</p>
                 </div>
               </div>
             ))}
           </div>
 
-          <div
-            style={{
-              background: 'rgba(59,130,246,0.06)',
-              border: '1px solid rgba(59,130,246,0.2)',
-              borderRadius: '10px',
-              padding: '16px 20px',
-              fontSize: '13px',
-              color: '#93c5fd',
-              lineHeight: '1.6',
-              marginTop: '8px',
-            }}
-          >
-            <strong style={{ color: '#60a5fa' }}>Keep your {co.brokerShortName} account open.</strong>{' '}
-            Future {co.ticker} vests will continue landing there. Only move the shares you already
-            hold to Rovia.
+          <div style={{
+            background: 'var(--gold-subtle)',
+            border: '1px solid var(--gold-border)',
+            borderRadius: '12px', padding: '16px 20px',
+            fontSize: '13px', color: '#e2c896', lineHeight: '1.7', marginTop: '8px',
+            display: 'flex', flexDirection: 'column', gap: '6px',
+          }}>
+            <div><strong style={{ color: 'var(--gold)' }}>No sale. No tax event.</strong>{' '}Shares transfer in-kind — your holding period and cost basis carry over intact.</div>
+            <div><strong style={{ color: 'var(--gold)' }}>Keep your {co.brokerShortName} account open.</strong>{' '}Future {co.ticker} vests will continue landing there. Only move the shares you already hold.</div>
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section
-        style={{
-          padding: '48px 24px',
-          borderTop: '1px solid rgba(255,255,255,0.05)',
-          background: 'rgba(255,255,255,0.01)',
-        }}
-      >
-        <div style={{ maxWidth: '720px', margin: '0 auto' }}>
-          <h2
-            style={{
-              fontSize: '13px',
-              fontWeight: '600',
-              color: '#475569',
-              textTransform: 'uppercase',
-              letterSpacing: '0.08em',
-              marginBottom: '24px',
-            }}
-          >
-            Common questions — {co.name}
-          </h2>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      {/* ── FAQ ─────────────────────────────────────────────── */}
+      <section style={{ padding: '56px 28px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.015)' }}>
+        <div style={{ maxWidth: '760px', margin: '0 auto' }}>
+          <div style={{ display: 'flex', marginBottom: '28px' }}>
+            <span className="section-label">Common questions — {co.name}</span>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             {co.faq.map((item) => (
-              <div
-                key={item.q}
-                style={{
-                  background: '#0f1828',
-                  border: '1px solid rgba(255,255,255,0.07)',
-                  borderRadius: '10px',
-                  padding: '20px',
-                }}
-              >
-                <h3
-                  style={{
-                    fontSize: '14px',
-                    fontWeight: '600',
-                    color: '#e2e8f0',
-                    marginBottom: '10px',
-                  }}
-                >
+              <div key={item.q} className="card" style={{ padding: '22px' }}>
+                <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#f0f2f5', marginBottom: '10px' }}>
                   {item.q}
                 </h3>
-                <p style={{ fontSize: '13px', color: '#64748b', lineHeight: '1.7' }}>{item.a}</p>
+                <p style={{ fontSize: '13px', color: '#8892a4', lineHeight: '1.75' }}>{item.a}</p>
               </div>
             ))}
           </div>
-
           <div style={{ marginTop: '24px' }}>
-            <a
-              href={co.brokerGuideUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                fontSize: '13px',
-                color: '#60a5fa',
-                textDecoration: 'none',
-                fontWeight: '500',
-              }}
-            >
+            <a href={co.brokerGuideUrl} target="_blank" rel="noopener noreferrer"
+              style={{ fontSize: '13px', color: 'var(--gold)', textDecoration: 'none', fontWeight: '600' }}>
               {co.brokerGuideLabel}
             </a>
           </div>
         </div>
       </section>
 
-      {/* Stock chart */}
-      <section
-        style={{
-          padding: '48px 24px',
-          borderTop: '1px solid rgba(255,255,255,0.05)',
-        }}
-      >
-        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <p
-            style={{
-              fontSize: '12px',
-              fontWeight: '600',
-              color: '#475569',
-              textTransform: 'uppercase',
-              letterSpacing: '0.08em',
-              marginBottom: '16px',
-            }}
-          >
-            {co.ticker} stock performance
-          </p>
+      {/* ── Stock chart ──────────────────────────────────────── */}
+      <section style={{ padding: '56px 28px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
+          <div style={{ display: 'flex', marginBottom: '20px' }}>
+            <span className="section-label">{co.ticker} stock performance</span>
+          </div>
           <StockChart ticker={co.ticker} color={co.color} />
         </div>
       </section>
 
-      {/* Calculators */}
-      <section
-        style={{
-          padding: '48px 24px',
-          borderTop: '1px solid rgba(255,255,255,0.05)',
-        }}
-      >
-        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <p
-            style={{
-              fontSize: '12px',
-              fontWeight: '600',
-              color: '#475569',
-              textTransform: 'uppercase',
-              letterSpacing: '0.08em',
-              marginBottom: '16px',
-            }}
-          >
-            RSU calculators
-          </p>
+      {/* ── Calculators ──────────────────────────────────────── */}
+      <section style={{ padding: '56px 28px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.015)' }}>
+        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
+          <div style={{ display: 'flex', marginBottom: '20px' }}>
+            <span className="section-label">RSU calculators</span>
+          </div>
           <RsuCalculators company={co} />
         </div>
       </section>
 
-      {/* ESPP calculator — only for companies that offer it */}
+      {/* ── ESPP calculator ──────────────────────────────────── */}
       {companyGuides[co.slug]?.hasEspp && (
-        <section
-          style={{
-            padding: '0 24px 48px',
-          }}
-        >
-          <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-            <p
-              style={{
-                fontSize: '12px',
-                fontWeight: '600',
-                color: '#475569',
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                marginBottom: '16px',
-              }}
-            >
-              ESPP calculator
-            </p>
+        <section style={{ padding: '0 28px 56px' }}>
+          <div style={{ maxWidth: '960px', margin: '0 auto' }}>
+            <div style={{ display: 'flex', marginBottom: '20px' }}>
+              <span className="section-label">ESPP calculator</span>
+            </div>
             <EsppCalculator company={co} />
           </div>
         </section>
       )}
 
-      {/* 2000-word guide content */}
-      <section
-        style={{
-          padding: '56px 24px',
-          borderTop: '1px solid rgba(255,255,255,0.05)',
-          background: 'rgba(255,255,255,0.01)',
-        }}
-      >
+      {/* ── Guide content ────────────────────────────────────── */}
+      <section style={{
+        padding: '64px 28px',
+        borderTop: '1px solid rgba(255,255,255,0.05)',
+        background: 'rgba(255,255,255,0.015)',
+      }}>
         <GuideContent company={co} />
       </section>
 
-      {/* Final CTA */}
-      <section
-        style={{
-          padding: '60px 24px 80px',
-          textAlign: 'center',
-          borderTop: '1px solid rgba(255,255,255,0.05)',
-        }}
-      >
-        <div style={{ maxWidth: '500px', margin: '0 auto' }}>
-          <h2
-            style={{
-              fontSize: 'clamp(20px, 3vw, 30px)',
-              fontWeight: '700',
-              color: '#f1f5f9',
-              letterSpacing: '-0.02em',
-              marginBottom: '12px',
-            }}
-          >
-            Ready to move your {co.name} RSUs?
+      {/* ── Final CTA ────────────────────────────────────────── */}
+      <section style={{ padding: '80px 28px 100px', textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ maxWidth: '520px', margin: '0 auto' }}>
+          <h2 style={{
+            fontSize: 'clamp(24px, 3vw, 38px)',
+            fontWeight: '800', color: '#f0f2f5',
+            letterSpacing: '-0.025em', marginBottom: '8px', lineHeight: '1.1',
+          }}>
+            Ready to move your
           </h2>
-          <p style={{ fontSize: '15px', color: '#64748b', marginBottom: '28px', lineHeight: '1.6' }}>
-            Open a Rovia account in 1–3 days. Then initiate the ACATS transfer and your{' '}
-            {co.ticker} shares arrive with INR cost basis, lot-level 24-month LTCG countdown, and
-            Schedule FA ready for filing.
+          <h2 style={{ fontSize: 'clamp(26px, 3.3vw, 42px)', letterSpacing: '-0.02em', marginBottom: '20px' }}>
+            <span className="canela">{co.name} RSUs?</span>
+          </h2>
+          <p style={{ fontSize: '15px', color: '#8892a4', marginBottom: '36px', lineHeight: '1.75' }}>
+            Transfer in minutes inside Rovia. Your {co.ticker} shares arrive in 3–5 days
+            with INR cost basis, lot-level 24-month LTCG countdown, and Schedule FA ready for filing.
           </p>
-          <a
-            href="https://rovia.one"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              background: '#3b82f6',
-              color: 'white',
-              fontSize: '15px',
-              fontWeight: '600',
-              padding: '14px 36px',
-              borderRadius: '8px',
-              textDecoration: 'none',
-              display: 'inline-block',
-            }}
-          >
-            Open Rovia →
+          <a href="https://rovia.onelink.me/xOtI/yjxw13ya" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: '15px', padding: '13px 32px' }}>
+            Transfer to Rovia →
           </a>
         </div>
       </section>
 
-      {/* Other companies */}
-      <section
-        style={{
-          padding: '32px 24px 48px',
-          borderTop: '1px solid rgba(255,255,255,0.05)',
-        }}
-      >
-        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <p
-            style={{
-              fontSize: '12px',
-              fontWeight: '600',
-              color: '#475569',
-              textTransform: 'uppercase',
-              letterSpacing: '0.08em',
-              marginBottom: '16px',
-            }}
-          >
-            Also at Rovia
-          </p>
+      {/* ── Other companies ──────────────────────────────────── */}
+      <section style={{ padding: '40px 28px 56px', borderTop: '1px solid rgba(255,255,255,0.05)', background: '#040810' }}>
+        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
+          <div style={{ display: 'flex', marginBottom: '20px' }}>
+            <span className="section-label">Also at Rovia</span>
+          </div>
           <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
             {companyList
               .filter((slug) => slug !== co.slug)
@@ -617,48 +332,28 @@ export default function CompanyPage({ params }) {
                 const c = getCompany(slug);
                 if (!c) return null;
                 return (
-                  <Link
-                    key={c.slug}
-                    href={`/${c.slug}`}
-                    style={{
-                      background: '#0f1828',
-                      border: '1px solid rgba(255,255,255,0.07)',
-                      borderRadius: '8px',
-                      padding: '8px 14px',
-                      fontSize: '13px',
-                      fontWeight: '500',
-                      color: '#94a3b8',
-                      textDecoration: 'none',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                    }}
-                  >
-                    {c.hasLogo ? (
-                      <img
-                        src={`/logos/${c.slug}.png`}
-                        alt={c.name}
-                        width={14}
-                        height={14}
-                        style={{ objectFit: 'contain', opacity: 0.8 }}
-                      />
-                    ) : (
-                      <span
-                        style={{
-                          width: '6px',
-                          height: '6px',
-                          borderRadius: '50%',
-                          background: c.color,
-                        }}
-                      />
-                    )}
-                    {c.name} RSU →
+                  <Link key={c.slug} href={`/${c.slug}`} style={{
+                    background: 'var(--card)',
+                    border: '1px solid rgba(255,255,255,0.06)',
+                    borderRadius: '999px',
+                    padding: '7px 16px',
+                    fontSize: '13px', fontWeight: '500', color: '#8892a4',
+                    textDecoration: 'none',
+                    display: 'flex', alignItems: 'center', gap: '7px',
+                    transition: 'border-color 0.15s, color 0.15s',
+                  }}>
+                    {c.hasLogo
+                      ? <img src={`/logos/${c.slug}.png`} alt={c.name} width={14} height={14} style={{ objectFit: 'contain', opacity: 0.8 }} />
+                      : <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: c.color }} />
+                    }
+                    {c.name} →
                   </Link>
                 );
               })}
           </div>
         </div>
       </section>
+
     </div>
   );
 }

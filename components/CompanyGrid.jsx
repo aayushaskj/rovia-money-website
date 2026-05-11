@@ -26,7 +26,7 @@ export default function CompanyGrid() {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
               gap: '10px',
             }}
           >
@@ -40,31 +40,35 @@ export default function CompanyGrid() {
                   style={{
                     background: '#0f1828',
                     border: '1px solid rgba(255,255,255,0.07)',
-                    borderRadius: '12px',
-                    padding: '16px',
+                    borderRadius: '14px',
+                    padding: '20px 16px 16px',
                     textDecoration: 'none',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '10px',
+                    alignItems: 'flex-start',
+                    gap: '14px',
                     cursor: 'pointer',
-                    transition: 'border-color 0.15s, transform 0.15s',
+                    transition: 'border-color 0.15s, transform 0.15s, background 0.15s',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = c.color + '50';
+                    e.currentTarget.style.borderColor = c.color + '55';
                     e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.background = '#111e32';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)';
                     e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.background = '#0f1828';
                   }}
                 >
+                  {/* Logo — hero element */}
                   <div
                     style={{
-                      width: '44px',
-                      height: '44px',
-                      borderRadius: '10px',
-                      background: 'rgba(255,255,255,0.05)',
-                      border: '1px solid rgba(255,255,255,0.08)',
+                      width: '52px',
+                      height: '52px',
+                      borderRadius: '13px',
+                      background: 'rgba(255,255,255,0.07)',
+                      border: '1px solid rgba(255,255,255,0.10)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -76,31 +80,32 @@ export default function CompanyGrid() {
                       <img
                         src={`/logos/${c.slug}.png`}
                         alt={c.name}
-                        width={28}
-                        height={28}
+                        width={34}
+                        height={34}
                         style={{ objectFit: 'contain' }}
                       />
                     ) : (
-                      <span style={{ fontSize: '16px', fontWeight: '700', color: c.color }}>
+                      <span style={{ fontSize: '20px', fontWeight: '800', color: c.color }}>
                         {c.name[0]}
                       </span>
                     )}
                   </div>
 
-                  <div>
+                  <div style={{ width: '100%' }}>
                     <div
                       style={{
                         fontSize: '14px',
-                        fontWeight: '600',
+                        fontWeight: '700',
                         color: '#f1f5f9',
-                        marginBottom: '3px',
-                        lineHeight: '1.3',
+                        marginBottom: '4px',
+                        lineHeight: '1.25',
                       }}
                     >
                       {c.name}
                     </div>
-                    <div style={{ fontSize: '11px', color: '#475569' }}>
-                      {c.ticker} · RSU guide →
+                    <div style={{ fontSize: '11px', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span>{c.ticker}</span>
+                      <span style={{ color: c.color + 'bb', fontSize: '11px' }}>→</span>
                     </div>
                   </div>
                 </Link>

@@ -32,39 +32,29 @@ export const brokerTemplates = {
     steps: (co) => [
       {
         n: '01',
-        title: 'Export E*TRADE transaction history',
-        detail: `Log into us.etrade.com/stockplans → Stock Plan Transactions or Tax Center → Export CSV of all vest, sell-to-cover, and sale events. Save this — it's your permanent lot ledger.`,
+        title: 'Download your E*TRADE holdings statement',
+        detail: `Log into us.etrade.com/stockplans → Tax Center or Stock Plan Transactions → Download your positions and gains statement. Save this — you'll upload it to Rovia later so it can import your exact cost basis.`,
       },
       {
         n: '02',
-        title: 'Open your Rovia account',
-        detail: `PAN, Aadhaar, Indian bank account, video KYC. 1–3 business days end-to-end. W-8BEN is signed at onboarding, getting you the 25% US dividend withholding rate.`,
+        title: 'Open Rovia → tap Transfer In → select E*TRADE',
+        detail: `Open Rovia and navigate to Transfer In. Select "E*Trade from Morgan Stanley" from the broker list. Enter your full name exactly as it appears on your E*TRADE account, and your E*TRADE brokerage account number.`,
       },
       {
         n: '03',
-        title: 'Initiate ACATS transfer from Rovia',
-        detail: `Rovia → 'Transfer shares in' → Sending broker: E*TRADE Securities LLC → Enter your E*TRADE account number → Select ${co.ticker} lots (all or partial).`,
+        title: 'Choose full or partial — then submit',
+        detail: `Select Full Transfer to move all your ${co.ticker} holdings, or Partial to pick specific lots. Submit and you're done — the transfer is now in motion. No sale, no tax event. Shares move in-kind in 3–5 business days.`,
       },
       {
         n: '04',
-        title: 'Confirm on E*TRADE',
-        detail: `E*TRADE emails an authorization request within 1–3 business days. Confirm in your stock-plan account. ACATS is an in-kind share transfer — no shares are sold. Your broker may charge an outbound fee (E*TRADE: typically $50–$75 one-time). Rovia charges nothing to receive. Check your broker's fee schedule — some charge $0.`,
-      },
-      {
-        n: '05',
-        title: 'Wait 5–7 business days',
-        detail: `${co.ticker} shares arrive at Rovia with vest dates and USD cost basis intact. Your India 24-month LTCG clock continues from the original vest date — the transfer is not a tax event.`,
-      },
-      {
-        n: '06',
-        title: 'Reconcile your lots',
-        detail: `Cross-check Rovia's lot view against the Step 1 CSV. Verify INR cost basis (Rovia applies SBI TT rates at each vest date). Raise discrepancies with Rovia support promptly.`,
+        title: 'Upload your statement — Rovia imports your cost basis',
+        detail: `Once shares arrive, upload the statement from Step 1. Rovia uses it to import your cost basis, compute INR amounts at the vest-day SBI TT rate for each lot, and start the 24-month LTCG countdown. Your India compliance stack is now on autopilot.`,
       },
     ],
     faq: (co) => [
       {
         q: 'Does E*TRADE charge a fee to transfer out? Is it a sale?',
-        a: `ACATS is an in-kind share transfer — no shares are sold and no capital gains are triggered. Your shares move as-is to Rovia with vest dates and cost basis intact. E*TRADE may charge an outbound fee (typically $50–$75 one-time); check your account agreement. Rovia charges nothing to receive. Some brokers charge $0 — adjust the transfer cost calculator above accordingly.`,
+        a: `ACATS is an in-kind share transfer — no shares are sold and no capital gains are triggered. Your shares move as-is to Rovia with vest dates and cost basis intact. E*TRADE may charge an outbound fee (typically $50–$75 one-time); check your account agreement. Rovia charges nothing to receive.`,
       },
       {
         q: 'Will my vesting schedule change?',
@@ -107,39 +97,29 @@ export const brokerTemplates = {
     steps: (co) => [
       {
         n: '01',
-        title: 'Export Shareworks transaction history',
-        detail: `Log into shareworks.morganstanley.com → Reports → Transaction history + Tax documents. Export CSV of all vest, sell-to-cover, and sale events.`,
+        title: 'Download your Shareworks holdings statement',
+        detail: `Log into shareworks.morganstanley.com → Reports → Tax documents + Transaction history. Download your positions and gains statement. Save this — you'll upload it to Rovia to import your exact cost basis.`,
       },
       {
         n: '02',
-        title: 'Open your Rovia account',
-        detail: `PAN, Aadhaar, Indian bank account, video KYC. 1–3 business days. W-8BEN at onboarding for 25% US dividend withholding rate.`,
+        title: 'Open Rovia → tap Transfer In → select Morgan Stanley',
+        detail: `Open Rovia and navigate to Transfer In. Select "Morgan Stanley StockPlan Connect · at Work" from the broker list. Enter your full name exactly as it appears on Shareworks, and your Shareworks account number.`,
       },
       {
         n: '03',
-        title: 'Initiate ACATS transfer from Rovia',
-        detail: `Rovia → 'Transfer shares in' → Sending broker: Morgan Stanley Smith Barney LLC → Your Shareworks account number → Select ${co.ticker} lots.`,
+        title: 'Choose full or partial — then submit',
+        detail: `Select Full Transfer to move all your ${co.ticker} holdings, or Partial to pick specific lots. Submit and you're done — the transfer is now in motion. No sale, no tax event. Shares move in-kind in 3–5 business days.`,
       },
       {
         n: '04',
-        title: 'Confirm on Morgan Stanley at Work',
-        detail: `MSAW sends an authorization request within 1–3 days. Confirm in Shareworks. ACATS is an in-kind share transfer — no shares sold. Outbound fee: typically $50–$75 depending on your broker — some charge $0. Rovia charges nothing to receive.`,
-      },
-      {
-        n: '05',
-        title: 'Wait 5–7 business days',
-        detail: `${co.ticker} shares arrive at Rovia with lot dates and cost basis preserved. India 24-month LTCG clock continues from each original vest date.`,
-      },
-      {
-        n: '06',
-        title: 'Reconcile lots',
-        detail: `Cross-check Rovia lots against your Step 1 export. Verify INR cost basis (SBI TT at vest date). Raise any discrepancies with Rovia support promptly.`,
+        title: 'Upload your statement — Rovia imports your cost basis',
+        detail: `Once shares arrive, upload the statement from Step 1. Rovia uses it to import your cost basis, compute INR amounts at the vest-day SBI TT rate for each lot, and start the 24-month LTCG countdown. Your India compliance stack is now on autopilot.`,
       },
     ],
     faq: (co) => [
       {
         q: 'Does Morgan Stanley charge a fee to transfer out? Is it a sale?',
-        a: `ACATS is an in-kind share transfer — no shares are sold, no capital gains event triggered. Morgan Stanley may charge an outbound fee (typically $50–$75 one-time). Rovia charges nothing to receive. Fee varies by account type — check your Shareworks agreement. Some brokers charge $0.`,
+        a: `ACATS is an in-kind share transfer — no shares are sold, no capital gains event triggered. Morgan Stanley may charge an outbound fee (typically $50–$75 one-time). Rovia charges nothing to receive. Fee varies by account type — check your Shareworks agreement.`,
       },
       {
         q: 'Will my vesting schedule change?',
@@ -182,39 +162,29 @@ export const brokerTemplates = {
     steps: (co) => [
       {
         n: '01',
-        title: 'Export Fidelity NetBenefits history',
-        detail: `Log into netbenefits.com → Stock Plan → History. Export CSV of all vest, sell-to-cover, and post-vest sale events. Save as your lot ledger.`,
+        title: 'Download your Fidelity NetBenefits holdings statement',
+        detail: `Log into netbenefits.com → Stock Plan → Statements or History → Download your positions and gains statement. Save this — you'll upload it to Rovia to import your exact cost basis.`,
       },
       {
         n: '02',
-        title: 'Open your Rovia account',
-        detail: `PAN, Aadhaar, Indian bank account, video KYC. 1–3 business days. W-8BEN at onboarding for 25% US dividend withholding rate.`,
+        title: 'Open Rovia → tap Transfer In → select Fidelity',
+        detail: `Open Rovia and navigate to Transfer In. Select "Fidelity · NetBenefits" from the broker list. Enter your full name exactly as it appears on your Fidelity account, and your Fidelity NetBenefits account number.`,
       },
       {
         n: '03',
-        title: 'Initiate ACATS transfer from Rovia',
-        detail: `Rovia → 'Transfer shares in' → Sending broker: Fidelity Brokerage Services LLC → Your Fidelity NetBenefits account number → Select ${co.ticker} lots.`,
+        title: 'Choose full or partial — then submit',
+        detail: `Select Full Transfer to move all your ${co.ticker} holdings, or Partial to pick specific lots. Submit and you're done — the transfer is now in motion. No sale, no tax event. Shares move in-kind in 3–5 business days.`,
       },
       {
         n: '04',
-        title: 'Confirm on Fidelity',
-        detail: `Fidelity sends an authorization request within 1–3 business days. Confirm in NetBenefits. ACATS is an in-kind share transfer — no shares sold. Outbound fee: typically $50 depending on your broker — some charge $0. Rovia charges nothing to receive.`,
-      },
-      {
-        n: '05',
-        title: 'Wait 5–7 business days',
-        detail: `${co.ticker} shares arrive at Rovia with vest dates and cost basis preserved. India 24-month LTCG clock unaffected — continues from original vest date.`,
-      },
-      {
-        n: '06',
-        title: 'Reconcile lots',
-        detail: `Cross-check Rovia lots against Step 1 export. Verify INR cost basis (Rovia applies SBI TT at each vest date). Raise discrepancies promptly.`,
+        title: 'Upload your statement — Rovia imports your cost basis',
+        detail: `Once shares arrive, upload the statement from Step 1. Rovia uses it to import your cost basis, compute INR amounts at the vest-day SBI TT rate for each lot, and start the 24-month LTCG countdown. Your India compliance stack is now on autopilot.`,
       },
     ],
     faq: (co) => [
       {
         q: 'Does Fidelity charge a fee to transfer out? Is it a sale?',
-        a: `ACATS is an in-kind transfer — no shares sold, no capital gains triggered. Fidelity may charge an outbound fee (typically $50 one-time). Rovia charges nothing to receive. Check your NetBenefits agreement. Fee and waiver eligibility varies.`,
+        a: `ACATS is an in-kind transfer — no shares sold, no capital gains triggered. Fidelity may charge an outbound fee (typically $50 one-time). Rovia charges nothing to receive. Check your NetBenefits agreement for fee eligibility.`,
       },
       {
         q: 'Will my vesting schedule change?',
@@ -257,39 +227,29 @@ export const brokerTemplates = {
     steps: (co) => [
       {
         n: '01',
-        title: 'Export Schwab Equity Award Center history',
-        detail: `Log in → Equity Award Center → Transactions → Export CSV of all vest, sell-to-cover, and post-vest sales. Save as lot ledger.`,
+        title: 'Download your Schwab Equity Award Center statement',
+        detail: `Log into schwab.com → Equity Award Center → Accounts → Positions or History → Download your holdings and gains statement. Save this — you'll upload it to Rovia to import your exact cost basis.`,
       },
       {
         n: '02',
-        title: 'Open your Rovia account',
-        detail: `PAN, Aadhaar, Indian bank account, video KYC. 1–3 business days. W-8BEN at onboarding for 25% US dividend rate.`,
+        title: 'Open Rovia → tap Transfer In → select Schwab',
+        detail: `Open Rovia and navigate to Transfer In. Select "Charles Schwab · Equity Award Center" from the broker list. Enter your full name exactly as it appears on your Schwab account, and your Schwab account number.`,
       },
       {
         n: '03',
-        title: 'Initiate ACATS transfer from Rovia',
-        detail: `Rovia → 'Transfer shares in' → Sending broker: Charles Schwab & Co. Inc. → Schwab account number → Select ${co.ticker} lots.`,
+        title: 'Choose full or partial — then submit',
+        detail: `Select Full Transfer to move all your ${co.ticker} holdings, or Partial to pick specific lots. Submit and you're done — the transfer is now in motion. No sale, no tax event. Shares move in-kind in 3–5 business days.`,
       },
       {
         n: '04',
-        title: 'Confirm on Schwab',
-        detail: `Schwab emails authorization within 1–3 days. Confirm in Equity Award Center. ACATS is an in-kind share transfer — no shares sold. Outbound fee: typically $50 depending on your broker — some charge $0. Rovia charges nothing to receive.`,
-      },
-      {
-        n: '05',
-        title: 'Wait 5–7 business days',
-        detail: `${co.ticker} shares arrive at Rovia with vest dates and cost basis intact. India 24-month LTCG clock continues from original vest.`,
-      },
-      {
-        n: '06',
-        title: 'Reconcile lots',
-        detail: `Cross-check Rovia lots against Step 1 export. Verify INR cost basis (SBI TT at each vest date).`,
+        title: 'Upload your statement — Rovia imports your cost basis',
+        detail: `Once shares arrive, upload the statement from Step 1. Rovia uses it to import your cost basis, compute INR amounts at the vest-day SBI TT rate for each lot, and start the 24-month LTCG countdown. Your India compliance stack is now on autopilot.`,
       },
     ],
     faq: (co) => [
       {
         q: 'Does Schwab charge a fee to transfer out? Is it a sale?',
-        a: `ACATS is an in-kind transfer — no shares sold, no capital gains triggered. Schwab may charge an outbound fee (typically $50 one-time). Rovia charges nothing to receive. Check your Equity Award Center agreement. Some account types may be eligible for a fee waiver.`,
+        a: `ACATS is an in-kind transfer — no shares sold, no capital gains triggered. Schwab may charge an outbound fee (typically $50 one-time). Rovia charges nothing to receive. Check your Equity Award Center agreement for fee details.`,
       },
       {
         q: 'Will my vesting schedule change?',
