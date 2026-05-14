@@ -40,7 +40,7 @@ export const metadata = {
       { url: '/favicon.ico', sizes: 'any' },
     ],
     apple: [
-      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     ],
     other: [
       { rel: 'manifest', url: '/site.webmanifest' },
