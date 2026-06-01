@@ -1,11 +1,12 @@
 import { companyList } from '@/data/companies';
 import { stories } from '@/data/stories';
 import { tools } from '@/data/tools';
+import { posts as blogPosts } from '@/data/blog';
 
 const BASE_URL = 'https://rovia.money';
 
 // Bump this date whenever content is significantly updated
-const CONTENT_UPDATED = new Date('2025-05-11');
+const CONTENT_UPDATED = new Date('2026-06-01');
 
 export default function sitemap() {
   const companyRoutes = companyList.map((slug) => ({
@@ -42,6 +43,16 @@ export default function sitemap() {
     priority: 0.85,
   }));
 
+  const blogRoutes = [
+    { url: `${BASE_URL}/blog`, lastModified: CONTENT_UPDATED, changeFrequency: 'weekly', priority: 0.85 },
+    ...blogPosts.map((p) => ({
+      url: `${BASE_URL}/blog/${p.slug}`,
+      lastModified: new Date(p.updatedDate || p.publishDate || CONTENT_UPDATED),
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    })),
+  ];
+
   return [
     {
       url: BASE_URL,
@@ -53,5 +64,6 @@ export default function sitemap() {
     ...toolRoutes,
     ...storyRoutes,
     ...guideRoutes,
+    ...blogRoutes,
   ];
 }
