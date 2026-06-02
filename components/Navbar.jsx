@@ -150,8 +150,8 @@ export default function Navbar() {
             Stories
           </Link>
 
-          <a
-            href="https://vested.blog" target="_blank" rel="noopener noreferrer"
+          <Link
+            href="/blog"
             style={{
               color: '#8892a4', fontSize: '14px', fontWeight: '500',
               padding: '7px 14px', textDecoration: 'none', borderRadius: '999px',
@@ -161,7 +161,7 @@ export default function Navbar() {
             onMouseLeave={e => e.currentTarget.style.color = '#8892a4'}
           >
             Blog
-          </a>
+          </Link>
         </div>
 
         {/* CTA + hamburger */}
@@ -241,7 +241,7 @@ export default function Navbar() {
           <div style={{ marginTop: '12px', display: 'flex', gap: '16px', paddingTop: '8px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
             <Link href="/tools" onClick={() => setOpen(false)} style={{ color: '#8892a4', textDecoration: 'none', fontSize: '14px' }}>Tools</Link>
             <Link href="/stories" onClick={() => setOpen(false)} style={{ color: '#8892a4', textDecoration: 'none', fontSize: '14px' }}>Stories</Link>
-            <a href="https://vested.blog" target="_blank" rel="noopener noreferrer" style={{ color: '#8892a4', textDecoration: 'none', fontSize: '14px' }}>Blog</a>
+            <Link href="/blog" onClick={() => setOpen(false)} style={{ color: '#8892a4', textDecoration: 'none', fontSize: '14px' }}>Blog</Link>
           </div>
         </div>
       )}

@@ -67,7 +67,7 @@ const companiesRaw = {
     painPoints: [
       { icon: '₹', title: '~₹5,000 lost per $10,000 wire', detail: "Morgan Stanley's $25–$50 wire fee plus Indian bank FX spread = ₹4,000–₹7,000 per repatriation. On $50,000/year in vests, that's ₹20,000–₹35,000 gone." },
       { icon: '📋', title: 'USD-only reporting on Shareworks', detail: 'Shareworks reports in USD. India ITR needs INR cost basis per lot at vest-day SBI TT rate — manual rebuild every filing season.' },
-      { icon: '🔢', title: 'FIFO default buries LTCG savings', detail: "Shareworks defaults to FIFO. For Indian residents with the 24-month LTCG rule, picking the right lot can mean the difference between 20% and 30% tax. The setting exists but isn't surfaced." },
+      { icon: '🔢', title: 'FIFO default buries LTCG savings', detail: "Shareworks defaults to FIFO. For Indian residents with the 24-month LTCG rule, picking the right lot can mean the difference between 12.5% LTCG and slab-rate STCG. The setting exists but isn't surfaced." },
       { icon: '📄', title: 'No India compliance tooling', detail: 'No Schedule FA. No Form 67 / FTC prep. No 24-month countdown per lot. You or your CA rebuilds all of this from the 1099-B every year.' },
     ],
     steps: [
@@ -125,7 +125,7 @@ const companiesRaw = {
     painPoints: [
       { icon: '⚠️', title: "Amazon's back-weighted vesting concentrates risk", detail: "The 5%–15%–40%–40% schedule means most of your AMZN value lands in years 3 and 4. Lot management, LTCG timing, and repatriation planning matter more at Amazon than most." },
       { icon: '₹', title: '~₹5,000 lost per $10,000 wire', detail: "Morgan Stanley at Work's $25–$50 wire + Indian bank FX spread. On a large year-4 AMZN vest, you may repatriate $60,000+ — that's ₹24,000–₹42,000 in FX friction in one year." },
-      { icon: '🔢', title: 'FIFO default buries LTCG savings', detail: "Shareworks defaults to FIFO. For Indian residents with the 24-month LTCG rule, picking the right lot can mean the difference between 20% and 30% tax." },
+      { icon: '🔢', title: 'FIFO default buries LTCG savings', detail: "Shareworks defaults to FIFO. For Indian residents with the 24-month LTCG rule, picking the right lot can mean the difference between 12.5% LTCG and slab-rate STCG." },
       { icon: '📄', title: 'USD-only reporting, no India-format export', detail: 'Morgan Stanley at Work issues a US 1099-B. India filing needs INR amounts, 24-month LTCG classification, and Schedule FA — none of which Shareworks generates.' },
     ],
     steps: [
