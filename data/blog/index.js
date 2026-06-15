@@ -7,6 +7,7 @@
 // Register each post below in the `modules` map.
 // ─────────────────────────────────────────────
 
+// ── Pillars ──
 import * as rsuTaxIndia from './rsu-tax-india';
 import * as scheduleFaRsu from './schedule-fa-rsu';
 import * as transferRsusToIndia from './transfer-rsus-to-india';
@@ -18,7 +19,18 @@ import * as form67Rsu from './form-67-rsu';
 import * as choosingIndianUsEquityPlatform from './choosing-indian-us-equity-platform';
 import * as budgetRsuIndia from './budget-rsu-india';
 
+// ── Broker-transfer companions ──
+import * as transferRsusFromSchwab from './transfer-rsus-from-schwab';
+import * as transferRsusFromMorganStanley from './transfer-rsus-from-morgan-stanley';
+import * as transferRsusFromFidelity from './transfer-rsus-from-fidelity';
+import * as transferRsusFromEtrade from './transfer-rsus-from-etrade';
+import * as transferRsusFromIbkr from './transfer-rsus-from-ibkr';
+import * as transferRsusFromIndmoney from './transfer-rsus-from-indmoney';
+import * as transferRsusFromVested from './transfer-rsus-from-vested';
+import * as transferRsusFromPaasa from './transfer-rsus-from-paasa';
+
 const modules = {
+  // Pillars
   'rsu-tax-india': rsuTaxIndia,
   'schedule-fa-rsu': scheduleFaRsu,
   'transfer-rsus-to-india': transferRsusToIndia,
@@ -29,6 +41,15 @@ const modules = {
   'form-67-rsu': form67Rsu,
   'choosing-indian-us-equity-platform': choosingIndianUsEquityPlatform,
   'budget-rsu-india': budgetRsuIndia,
+  // Broker-transfer companions
+  'transfer-rsus-from-schwab': transferRsusFromSchwab,
+  'transfer-rsus-from-morgan-stanley': transferRsusFromMorganStanley,
+  'transfer-rsus-from-fidelity': transferRsusFromFidelity,
+  'transfer-rsus-from-etrade': transferRsusFromEtrade,
+  'transfer-rsus-from-ibkr': transferRsusFromIbkr,
+  'transfer-rsus-from-indmoney': transferRsusFromIndmoney,
+  'transfer-rsus-from-vested': transferRsusFromVested,
+  'transfer-rsus-from-paasa': transferRsusFromPaasa,
 };
 
 // Sorted newest first by publishDate (ISO yyyy-mm-dd)
