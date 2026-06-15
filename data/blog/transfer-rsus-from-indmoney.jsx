@@ -6,18 +6,18 @@ import Link from 'next/link';
 
 export const meta = {
   slug: 'transfer-rsus-from-indmoney',
-  title: 'How to Move Your US Stock Holdings from INDmoney to Rovia',
-  dek: 'INDmoney built an India-friendly US-equity gateway via partner-broker rails. Migrating to a dedicated RSU platform involves account closure, position transfer or liquidation, and re-establishing lot-level INR cost basis.',
+  title: 'How to Transfer RSUs from INDmoney to Rovia',
+  dek: 'INDmoney built an India-friendly US-equity gateway via partner-broker rails. Migrating your RSU and US stock holdings to Rovia involves account closure, position transfer or liquidation, and re-establishing lot-level INR cost basis.',
   publishDate: '2026-06-05',
   updatedDate: '2026-06-05',
   author: 'Rovia Editorial',
-  tags: ['indmoney', 'platform', 'transfer', 'rsu'],
+  tags: ['indmoney', 'platform', 'transfer', 'rsu', 'rovia'],
   readingMinutes: 7,
-  seoTitle: 'Move US Stocks from INDmoney to Rovia: The Migration Playbook (2026)',
+  seoTitle: 'Transfer RSUs from INDmoney to Rovia: Migration Playbook (2026)',
   seoDescription:
-    'How to migrate your US equity holdings from INDmoney to a Rovia-managed setup. Account closure, position transfer or liquidation, lot history reconstruction, FX considerations.',
+    'How to transfer RSUs and US equity holdings from INDmoney to Rovia. Account closure, position transfer or liquidation, lot history reconstruction, FX considerations.',
   seoKeywords:
-    'transfer indmoney us stocks, indmoney to rovia, indmoney us equity migration, indmoney account closure us stocks',
+    'transfer rsu indmoney to rovia, indmoney to rovia migration, indmoney us equity migration, indmoney account closure us stocks',
 };
 
 const ARTICLE_TEXT = '#cbd5e1';

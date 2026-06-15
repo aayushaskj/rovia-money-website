@@ -6,18 +6,18 @@ import Link from 'next/link';
 
 export const meta = {
   slug: 'transfer-rsus-from-fidelity',
-  title: 'How to Transfer RSUs from Fidelity NetBenefits to India',
-  dek: 'Fidelity Stock Plan Services links to a full Fidelity brokerage, which makes ACATS simpler than at Schwab — but the foreign-wire paper-form quirk catches every first-time filer.',
+  title: 'How to Transfer RSUs from Fidelity NetBenefits to Rovia',
+  dek: 'Fidelity Stock Plan Services links to a full Fidelity brokerage, which makes ACATS to Rovia simpler than at Schwab — but the foreign-wire paper-form quirk catches every first-time filer.',
   publishDate: '2026-06-05',
   updatedDate: '2026-06-05',
   author: 'Rovia Editorial',
-  tags: ['fidelity', 'broker', 'transfer', 'rsu'],
+  tags: ['fidelity', 'broker', 'transfer', 'rsu', 'rovia'],
   readingMinutes: 8,
-  seoTitle: 'Transfer RSUs from Fidelity NetBenefits to India (2026 Guide)',
+  seoTitle: 'Transfer RSUs from Fidelity NetBenefits to Rovia (2026 Guide)',
   seoDescription:
-    'Step-by-step: move Microsoft, NVIDIA, Salesforce, Oracle RSUs from Fidelity Stock Plan Services / NetBenefits to a Rovia-managed Indian setup. ACATS, wire form, FX cost.',
+    'Step-by-step: move Microsoft, NVIDIA, Salesforce, Oracle RSUs from Fidelity Stock Plan Services / NetBenefits to Rovia. ACATS, wire form, FX cost, INR cost basis.',
   seoKeywords:
-    'transfer rsu fidelity india, netbenefits transfer, fidelity stock plan services india, microsoft rsu transfer, nvidia rsu transfer, fidelity to rovia',
+    'transfer rsu fidelity to rovia, netbenefits to rovia, fidelity stock plan services rovia, microsoft rsu transfer, nvidia rsu transfer, fidelity to rovia migration',
 };
 
 const ARTICLE_TEXT = '#cbd5e1';

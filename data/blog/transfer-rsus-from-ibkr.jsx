@@ -6,18 +6,18 @@ import Link from 'next/link';
 
 export const meta = {
   slug: 'transfer-rsus-from-ibkr',
-  title: 'How to Transfer RSUs from Interactive Brokers (IBKR) to India',
-  dek: 'IBKR is the most common "intermediate" broker for Indian residents holding US stock — the parking spot between an employer plan and an Indian setup. This is the playbook to leave it.',
+  title: 'How to Transfer RSUs from Interactive Brokers (IBKR) to Rovia',
+  dek: 'IBKR is the most common "intermediate" broker for Indian residents holding US stock — a parking spot between an employer plan and a fully India-compliant setup. This is the playbook to move from IBKR to Rovia.',
   publishDate: '2026-06-05',
   updatedDate: '2026-06-05',
   author: 'Rovia Editorial',
-  tags: ['ibkr', 'interactive brokers', 'broker', 'transfer', 'rsu'],
+  tags: ['ibkr', 'interactive brokers', 'broker', 'transfer', 'rsu', 'rovia'],
   readingMinutes: 8,
-  seoTitle: 'Transfer RSUs from Interactive Brokers (IBKR) to India (2026)',
+  seoTitle: 'Transfer RSUs from Interactive Brokers (IBKR) to Rovia (2026)',
   seoDescription:
-    'How to move US stock holdings from Interactive Brokers (IBKR LLC) to a Rovia-managed Indian setup. Wire mechanics, FX spread, lot history, and the IBKR-specific procedures.',
+    'How to move US stock holdings from Interactive Brokers (IBKR LLC) to Rovia. Wire mechanics, FX spread, lot history, INR cost basis reconstruction, and IBKR-specific procedures.',
   seoKeywords:
-    'transfer rsu ibkr india, interactive brokers india transfer, ibkr to rovia, ibkr us stock india, ibkr wire india',
+    'transfer rsu ibkr to rovia, interactive brokers to rovia, ibkr to rovia migration, ibkr us stock india, ibkr wire india',
 };
 
 const ARTICLE_TEXT = '#cbd5e1';

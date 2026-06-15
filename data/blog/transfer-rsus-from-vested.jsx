@@ -6,18 +6,18 @@ import Link from 'next/link';
 
 export const meta = {
   slug: 'transfer-rsus-from-vested',
-  title: 'How to Move Your US Stock Holdings from Vested to Rovia',
-  dek: 'Vested was one of the first dedicated Indian US-equity platforms. Migrating to a more RSU-focused setup involves the standard partner-broker exit dance — done methodically, lot history is recoverable.',
+  title: 'How to Transfer RSUs from Vested to Rovia',
+  dek: 'Vested was one of the first dedicated Indian US-equity platforms. Migrating your RSUs and US stock holdings to Rovia involves the standard partner-broker exit dance — done methodically, lot history is recoverable.',
   publishDate: '2026-06-05',
   updatedDate: '2026-06-05',
   author: 'Rovia Editorial',
-  tags: ['vested', 'platform', 'transfer', 'rsu'],
+  tags: ['vested', 'platform', 'transfer', 'rsu', 'rovia'],
   readingMinutes: 7,
-  seoTitle: 'Move US Stocks from Vested to Rovia: The Migration Playbook (2026)',
+  seoTitle: 'Transfer RSUs from Vested to Rovia: Migration Playbook (2026)',
   seoDescription:
-    'How to migrate from Vested to a Rovia-managed setup. Position transfer or liquidation, lot history reconstruction, INR cost basis, Schedule FA continuity.',
+    'How to migrate RSUs and US equity holdings from Vested to Rovia. Position transfer or liquidation, lot history reconstruction, INR cost basis, Schedule FA continuity.',
   seoKeywords:
-    'transfer vested us stocks, vested to rovia, vested us equity migration, vested account closure',
+    'transfer rsu vested to rovia, vested to rovia migration, vested us equity migration, vested account closure',
 };
 
 const ARTICLE_TEXT = '#cbd5e1';

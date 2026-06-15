@@ -6,18 +6,18 @@ import Link from 'next/link';
 
 export const meta = {
   slug: 'transfer-rsus-from-schwab',
-  title: 'How to Transfer RSUs from Schwab Equity Awards to India',
-  dek: 'Schwab Equity Awards is a stock-plan account, not a full Schwab brokerage — that single fact dictates every transfer mechanic. Step-by-step playbook for Google, Apple, Cisco, IBM RSU holders.',
+  title: 'How to Transfer RSUs from Schwab Equity Awards to Rovia',
+  dek: 'Schwab Equity Awards is a stock-plan account, not a full Schwab brokerage — that single fact dictates every transfer mechanic. The step-by-step playbook to move your Google, Apple, Cisco, IBM RSUs to Rovia.',
   publishDate: '2026-06-05',
   updatedDate: '2026-06-05',
   author: 'Rovia Editorial',
-  tags: ['schwab', 'broker', 'transfer', 'rsu'],
+  tags: ['schwab', 'broker', 'transfer', 'rsu', 'rovia'],
   readingMinutes: 9,
-  seoTitle: 'Transfer RSUs from Schwab Equity Awards to India (2026 Playbook)',
+  seoTitle: 'Transfer RSUs from Schwab Equity Awards to Rovia (2026 Playbook)',
   seoDescription:
-    'Step-by-step: how to move Google, Apple, Cisco, IBM RSUs from Schwab Equity Awards to a Rovia-managed Indian setup. ACATS vs sell-remit, $25 wire fee, lot history preservation.',
+    'Step-by-step: how to move Google, Apple, Cisco, IBM RSUs from Schwab Equity Awards to Rovia. ACATS vs sell-remit, $25 wire fee, lot history preservation, INR cost basis.',
   seoKeywords:
-    'transfer rsu schwab india, schwab equity awards india, google rsu transfer, apple rsu transfer, schwab to rovia, schwab acats india',
+    'transfer rsu schwab to rovia, schwab equity awards rovia, google rsu transfer, apple rsu transfer, schwab acats india, schwab to rovia migration',
 };
 
 // ── shared inline styles ──
@@ -136,7 +136,7 @@ export function Body() {
 
       <h2 style={sH2}>5. What Rovia does</h2>
       <p style={sP}>
-        Rovia automates the India side of the Schwab transfer:
+        Once Schwab Equity Awards is behind you and your lots are with Rovia, the India-side operations are automated end-to-end:
       </p>
       <ul style={{ ...sP, paddingLeft: '24px' }}>
         <li style={{ marginBottom: '10px' }}><span style={sStrong}>Schwab statement parsing.</span> Drop your Year-End Tax Information PDF or Gains/Losses statement, lots are extracted with vest dates, share counts, USD cost basis.</li>

@@ -6,18 +6,18 @@ import Link from 'next/link';
 
 export const meta = {
   slug: 'transfer-rsus-from-paasa',
-  title: 'How to Move Your US Stock Holdings from Paasa to Rovia',
-  dek: 'Paasa is one of the newer entrants in the India-side US equity space. The migration template — data export, partner-broker exit, lot reconstruction — is the same shape; the platform-specific details are worth verifying.',
+  title: 'How to Transfer RSUs from Paasa to Rovia',
+  dek: 'Paasa is one of the newer entrants in the India-side US equity space. The migration template to Rovia — data export, partner-broker exit, lot reconstruction — is the same shape; the platform-specific details are worth verifying.',
   publishDate: '2026-06-05',
   updatedDate: '2026-06-05',
   author: 'Rovia Editorial',
-  tags: ['paasa', 'platform', 'transfer', 'rsu'],
+  tags: ['paasa', 'platform', 'transfer', 'rsu', 'rovia'],
   readingMinutes: 7,
-  seoTitle: 'Move US Stocks from Paasa to Rovia: Migration Playbook (2026)',
+  seoTitle: 'Transfer RSUs from Paasa to Rovia: Migration Playbook (2026)',
   seoDescription:
-    'How to migrate US equity holdings from Paasa to a Rovia-managed setup. Position transfer or liquidation, lot history reconstruction, INR cost basis, Schedule FA continuity.',
+    'How to migrate RSUs and US equity holdings from Paasa to Rovia. Position transfer or liquidation, lot history reconstruction, INR cost basis, Schedule FA continuity.',
   seoKeywords:
-    'transfer paasa us stocks, paasa to rovia, paasa us equity migration, paasa account closure',
+    'transfer rsu paasa to rovia, paasa to rovia migration, paasa us equity migration, paasa account closure',
 };
 
 const ARTICLE_TEXT = '#cbd5e1';

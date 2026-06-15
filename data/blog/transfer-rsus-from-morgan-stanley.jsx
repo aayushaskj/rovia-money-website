@@ -6,18 +6,18 @@ import Link from 'next/link';
 
 export const meta = {
   slug: 'transfer-rsus-from-morgan-stanley',
-  title: 'How to Transfer RSUs from Morgan Stanley StockPlan to India',
-  dek: 'Three Morgan Stanley product brands sit underneath your Meta / Microsoft / Netflix RSU account — Shareworks, StockPlan Connect, Smith Barney. Untangling them is the first step.',
+  title: 'How to Transfer RSUs from Morgan Stanley StockPlan to Rovia',
+  dek: 'Three Morgan Stanley product brands sit underneath your Meta / Microsoft / Netflix RSU account — Shareworks, StockPlan Connect, Smith Barney. Untangling them is the first step to moving your lots to Rovia.',
   publishDate: '2026-06-05',
   updatedDate: '2026-06-05',
   author: 'Rovia Editorial',
-  tags: ['morgan stanley', 'broker', 'transfer', 'rsu'],
+  tags: ['morgan stanley', 'broker', 'transfer', 'rsu', 'rovia'],
   readingMinutes: 9,
-  seoTitle: 'Transfer RSUs from Morgan Stanley StockPlan to India (2026)',
+  seoTitle: 'Transfer RSUs from Morgan Stanley StockPlan to Rovia (2026)',
   seoDescription:
-    'Step-by-step: how to move Meta, Microsoft, Netflix RSUs from Morgan Stanley StockPlan Connect / Shareworks to a Rovia-managed Indian setup. ACATS vs sell-remit, FX cost, lot history.',
+    'Step-by-step: how to move Meta, Microsoft, Netflix RSUs from Morgan Stanley StockPlan Connect / Shareworks to Rovia. ACATS vs sell-remit, FX cost, lot history, INR cost basis.',
   seoKeywords:
-    'transfer rsu morgan stanley india, shareworks rsu transfer, stockplan connect india, meta rsu transfer, microsoft rsu transfer, netflix rsu transfer, morgan stanley to rovia',
+    'transfer rsu morgan stanley to rovia, shareworks to rovia, stockplan connect rovia, meta rsu transfer, microsoft rsu transfer, netflix rsu transfer, morgan stanley to rovia migration',
 };
 
 const ARTICLE_TEXT = '#cbd5e1';

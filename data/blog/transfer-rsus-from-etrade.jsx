@@ -6,18 +6,18 @@ import Link from 'next/link';
 
 export const meta = {
   slug: 'transfer-rsus-from-etrade',
-  title: 'How to Transfer RSUs from E*TRADE Stock Plans to India',
-  dek: 'E*TRADE Stock Plans has the cleanest ACATS process and tightest FX of the major US employer brokers — but the "Morgan Stanley E*TRADE" branding under one umbrella can confuse the paperwork.',
+  title: 'How to Transfer RSUs from E*TRADE Stock Plans to Rovia',
+  dek: 'E*TRADE Stock Plans has the cleanest ACATS process and tightest FX of the major US employer brokers — moving lots to Rovia is the path of least resistance among the four.',
   publishDate: '2026-06-05',
   updatedDate: '2026-06-05',
   author: 'Rovia Editorial',
-  tags: ['etrade', 'broker', 'transfer', 'rsu'],
+  tags: ['etrade', 'broker', 'transfer', 'rsu', 'rovia'],
   readingMinutes: 8,
-  seoTitle: 'Transfer RSUs from E*TRADE Stock Plans to India (2026)',
+  seoTitle: 'Transfer RSUs from E*TRADE Stock Plans to Rovia (2026)',
   seoDescription:
-    'Step-by-step: move Amazon, Adobe, Snowflake, AMD, Salesforce RSUs from E*TRADE Stock Plans to a Rovia-managed Indian setup. ACATS, $25 wire, 50 bps FX.',
+    'Step-by-step: move Amazon, Adobe, Snowflake, AMD, Salesforce RSUs from E*TRADE Stock Plans to Rovia. ACATS, $25 wire, 50 bps FX, INR cost basis.',
   seoKeywords:
-    'transfer rsu etrade india, etrade stock plans india, amazon rsu transfer, adobe rsu transfer, etrade to rovia, snowflake rsu transfer',
+    'transfer rsu etrade to rovia, etrade stock plans rovia, amazon rsu transfer, adobe rsu transfer, etrade to rovia migration, snowflake rsu transfer',
 };
 
 const ARTICLE_TEXT = '#cbd5e1';
